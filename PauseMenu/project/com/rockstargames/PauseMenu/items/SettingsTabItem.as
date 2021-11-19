@@ -26,6 +26,8 @@
 	var index;
 	var _highlighted;
 	var txd_loader;
+	var _checkBoxHovered;
+	var _hovered;
 
 	function SettingsTabItem(mc, type, label, rightLabel, index, param5, param6, param7, param8, param9, param10)
 	{
@@ -40,7 +42,6 @@
 		this.highlightMC = this.itemMC.highlightMC;
 		this.maskMC = this.itemMC.maskMC;
 		this.labelMC = this.itemMC.labelMC;
-
 		this.sliderMC._visible = false;
 		this._type = type;
 
@@ -149,6 +150,9 @@
 		com.rockstargames.ui.utils.Colour.Colourise(this.highlightMC,__reg5.r,__reg5.g,__reg5.b,__reg5.a);
 		this.bgMC._visible = false;
 		this.highlighted = false;
+		this.itemMC.onRollOver = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOverItem, this.itemMC);
+		this.itemMC.onRollOut = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOutItem, this.itemMC);
+		this.itemMC.onDragOut = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOutItem, this.itemMC);
 	}
 
 	function set barscale(bi)
@@ -164,7 +168,7 @@
 		}
 		this.selectedIndex = this.barIndex;
 		this.selectedValue = this.barValsList[this.barIndex];
-		this.bar.percent(this.selectedValue, true);
+		this.bar.percent(this.selectedValue,true);
 	}
 
 	function get barscale()
@@ -241,6 +245,10 @@
 		var __reg5 = false;
 		if (_h)
 		{
+			if (this.itemMC.highlightMC._alpha < 100)
+			{
+				this.itemMC.highlightMC._alpha = 100;
+			}
 			com.rockstargames.ui.utils.Colour.setHudColour(com.rockstargames.ui.utils.HudColour.HUD_COLOUR_PAUSE_BG,__reg3);
 			com.rockstargames.ui.utils.Colour.setHudColour(com.rockstargames.ui.utils.HudColour.HUD_COLOUR_BLACK,__reg2);
 			if (this._type == 1 && __reg5 == false)
@@ -288,18 +296,35 @@
 
 	function mOverBox(mc)
 	{
-		if (!this.highlighted)
+		if (this._highlighted)
 		{
-			//this._hovered = true;
-			//this.hover = 1;
+			this._checkBoxHovered = true;
 		}
 	}
 	function mOutBox(mc)
 	{
-		if (this.highlighted)
+		if (this._highlighted)
 		{
-			//this._hovered = false;
-			//this.hover = -1;
+			this._checkBoxHovered = false;
+		}
+	}
+
+	function mOverItem(mc)
+	{
+		this._hovered = true;
+		if (!this._highlighted)
+		{
+			this.highlightMC._visible = true;
+			this.highlightMC._alpha = 20;
+		}
+	}
+	function mOutItem(mc)
+	{
+		this._hovered = false;
+		if (!this._highlighted)
+		{
+			this.highlightMC._visible = false;
+			this.highlightMC._alpha = 100;
 		}
 	}
 

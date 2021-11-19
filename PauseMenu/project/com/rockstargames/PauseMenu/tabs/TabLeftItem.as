@@ -39,7 +39,6 @@
 				break;
 			case 1 :
 			case 2 :
-			case 3 :
 				this.rightMenuUp = this._MC.attachMovie("pauseMenuRightBody", "right_body_" + this._MC.getNextHighestDepth(), this._MC.getNextHighestDepth());
 				com.rockstargames.ui.utils.Colour.ApplyHudColour(this.rightMenuUp.bgMC,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_PAUSE_BG);
 				this.scrollableContent = this.rightMenuUp.createEmptyMovieClip("viewContainer", this.rightMenuUp.getNextHighestDepth());
@@ -47,6 +46,17 @@
 				this.rightMenuUp._x = 290;
 				this.rightMenuUp.onRollOver = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOverRB);
 				this.rightMenuUp.onRollOut = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOutRB);
+				this.rightBodyHovered = false;
+				this.rightMenuUp._visible = false;
+				break;
+			case 3 :
+				this.rightMenuUp = this._MC.attachMovie("pauseMenuRightBody", "right_body_" + this._MC.getNextHighestDepth(), this._MC.getNextHighestDepth());
+				com.rockstargames.ui.utils.Colour.ApplyHudColour(this.rightMenuUp.bgMC,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_PAUSE_BG);
+				this.scrollableContent = this.rightMenuUp.createEmptyMovieClip("viewContainer", this.rightMenuUp.getNextHighestDepth());
+				this.rightMenuUp.setMask(this.rightMenuUp.maskMC);
+				this.rightMenuUp._x = 290;
+				//this.rightMenuUp.onRollOver = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOverRB);
+				//this.rightMenuUp.onRollOut = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOutRB);
 				this.rightBodyHovered = false;
 				this.rightMenuUp._visible = false;
 				break;
