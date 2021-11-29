@@ -65,6 +65,9 @@
 		this.PauseMenuHeader.menubar.onRightArrowClick();
 	}
 
+	function MOUSE_CLICK_EVENT()
+	{
+	}
 
 	function ADD_TXD_REF_RESPONSE(txd, strRef, success)
 	{
@@ -101,9 +104,11 @@
 			il.displayTxdResponse(txd,true);
 		}
 	}
-	
-	function CLEAR_ALL(){
-		for(var it in this.PauseMenuHeader.menubar.menuItemList){
+
+	function CLEAR_ALL()
+	{
+		for (var it in this.PauseMenuHeader.menubar.menuItemList)
+		{
 			var item = this.PauseMenuHeader.menubar.menuItemList[it];
 			item.removeMovieClip();
 		}
