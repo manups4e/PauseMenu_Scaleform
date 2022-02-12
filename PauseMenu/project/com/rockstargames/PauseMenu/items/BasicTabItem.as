@@ -16,16 +16,18 @@
 
 		com.rockstargames.ui.utils.Colour.ApplyHudColour(this.itemMC.labelMC,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_WHITE);
 
+		var format = this.itemMC.labelMC.titleTF.getTextFormat();
 		if (this.blipLayer)
 		{
 			this.blipLayer.removeMovieClip();
 		}
-		this.itemMC.labelMC.titleTF.autoSize = true;
+		this.itemMC.labelMC.titleTF.autoSize = "left";
 		this.itemMC.labelMC.titleTF.multiline = true;
 		this.itemMC.labelMC.titleTF.wordWrap = true;
 		var _loc3_ = new com.rockstargames.ui.utils.Text();
 		this.blipLayer = this.itemMC.labelMC.createEmptyMovieClip("blipLayerMC", 1000);
-		_loc3_.setTextWithIcons(param1,this.blipLayer,this.itemMC.labelMC.titleTF,0,13,3,false);
+		_loc3_.setTextWithIcons(param1,this.blipLayer,this.itemMC.labelMC.titleTF,0,format.size,3,false);
+		this.itemMC.labelMC.titleTF.setTextFormat(format);
 
 		this.snapBGGrid(this.itemMC.bgMC);
 	}
