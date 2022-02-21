@@ -16,9 +16,9 @@
 		this.updateItems();
 	}
 
-	function AddTitle(it, txt)
+	function AddTitle(it, txt, param2, param3)
 	{
-		this.LeftItemList[it].AddTitle(txt);
+		this.LeftItemList[it].AddTitle(txt, param2, param3);
 	}
 
 	function AddItem(it, _type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10)

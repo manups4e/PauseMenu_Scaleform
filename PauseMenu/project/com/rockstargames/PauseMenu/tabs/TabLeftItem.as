@@ -60,17 +60,24 @@
 				this.rightBodyHovered = false;
 				this.rightMenuUp._visible = false;
 				break;
+			case 4 :
+				this.rightMenuUp = this._MC.attachMovie("pauseMenuRightKeymap", "right_body_" + this._MC.getNextHighestDepth(), this._MC.getNextHighestDepth());
+				this.rightMenuUp._x = 290;
+				var _loc3_ = new com.rockstargames.ui.utils.HudColour();
+				com.rockstargames.ui.utils.Colour.setHudColour(com.rockstargames.ui.utils.HudColour.HUD_COLOUR_PAUSE_BG,_loc3_);
+				com.rockstargames.ui.utils.Colour.Colourise(this.rightMenuUp.bgMC,_loc3_.r,_loc3_.g,_loc3_.b,_loc3_.a);
+				break;
 		}
 		this.footerMC = this._MC.attachMovie("footer", "footer_mc_" + this._MC.getNextHighestDepth(), this._MC.getNextHighestDepth());
-		this.footerMC._visible = false;
 		com.rockstargames.ui.utils.Colour.ApplyHudColour(this.footerMC.bgMC,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_PAUSE_BG);
 		this.footerMC._x = 290;
 		this.footerMC._y = 432;
+		this.footerMC._visible = false;
 	}
 
-	function AddTitle(txt)
+	function AddTitle(txt, param1, param2)
 	{
-		if (this.itemType != 0 && this.itemType != 2 && this.itemType != 3)
+		if (this.itemType != 0 && this.itemType != 2 && this.itemType != 3 && this.itemType != 4)
 		{
 			if (this._title == undefined)
 			{
@@ -82,6 +89,17 @@
 				this._title.itemMC._y = 5;
 				this._title.snapBGGrid(this._title.bgMC);
 			}
+		}
+		else if (this.itemType == 4)
+		{
+			this._title = this.rightMenuUp.attachMovie("configurationList", "conf_list_" + this.rightMenuUp.getNextHighestDepth(), this.rightMenuUp.getNextHighestDepth(), {_x:0, _y:0});
+			this.rightMenuUp.bgMC._y = 27;
+			this._title.title.valueTF.text = txt;
+			this._title.value1.valueTF.text = param1;
+			this._title.value2.valueTF.text = param2;
+			com.rockstargames.ui.utils.Colour.ApplyHudColour(this._title.title.bg,com.rockstargames.ui.utils.HudColourLite.HUD_COLOUR_PAUSE_BG);
+			com.rockstargames.ui.utils.Colour.ApplyHudColour(this._title.value1.bg,com.rockstargames.ui.utils.HudColourLite.HUD_COLOUR_PAUSE_BG);
+			com.rockstargames.ui.utils.Colour.ApplyHudColour(this._title.value2.bg,com.rockstargames.ui.utils.HudColourLite.HUD_COLOUR_PAUSE_BG);
 		}
 	}
 
@@ -101,6 +119,9 @@
 				case 2 :
 					item = new com.rockstargames.PauseMenu.items.SettingsTabItem(this.scrollableContent, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
 					break;
+				case 3 :
+					item = new com.rockstargames.PauseMenu.items.KeymapItem(this.rightMenuUp, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
+					break;
 			}
 			this.ItemList.push(item);
 			this.updateItemsHeight();
@@ -118,24 +139,39 @@
 			if (it == 0)
 			{
 				this.ItemList[it].itemMC._y = _th + 2;
+				if (this.itemType == 4)
+				{
+					this.ItemList[it].itemMC._y = this.rightMenuUp.bgMC._y;
+				}
 			}
 			else
 			{
 				this.ItemList[it].itemMC._y = oldItemH + oldItemY;
+				if (this.itemType == 4)
+				{
+					this.ItemList[it].itemMC._y = this.ItemList[it].itemMC._y + 2;
+				}
 			}
 		}
 		this.viewHeight = this.ItemList[this.ItemList.length - 1].itemMC._y + this.ItemList[this.ItemList.length - 1].itemMC.bgMC._height;
-		if (this.itemType != 0 || this.itemType != 1)
+		if (this.itemType != 0 || this.itemType != 1 || this.itemType != 4)
 		{
 			this.rightMenuUp.bgMC._height = (this.viewHeight < this.viewMaskHeight) ? this.viewHeight : this.viewMaskHeight;
+		}
+		if (this.itemType == 4)
+		{
+			this.rightMenuUp.bgMC._height = this.viewHeight - (this._title == undefined ? 0 : 27);
 		}
 	}
 
 	function scrollToBottom()
 	{
-		if (this.viewHeight > this.viewMaskHeight)
+		if (this.itemType != 4)
 		{
-			this.scrollableContent._y = -(this.viewHeight - this.viewMaskHeight);
+			if (this.viewHeight > this.viewMaskHeight)
+			{
+				this.scrollableContent._y = -(this.viewHeight - this.viewMaskHeight);
+			}
 		}
 	}
 

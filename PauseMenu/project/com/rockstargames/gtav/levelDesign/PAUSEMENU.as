@@ -30,9 +30,9 @@
 		this.PauseMenu.AddLeftItem(tab,type,str,param1,param2,param3,param4);
 	}
 
-	function ADD_RIGHT_TITLE(tab, leftIndex, param1)
+	function ADD_RIGHT_TITLE(tab, leftIndex, param1, param2, param3)
 	{
-		this.PauseMenu.AddRightTitle(tab,leftIndex,param1);
+		this.PauseMenu.AddRightTitle(tab,leftIndex,param1,param2,param3);
 	}
 
 	function ADD_RIGHT_LIST_ITEM(tab, leftIndex, type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10)
@@ -58,6 +58,11 @@
 	function UPDATE_RIGHT_STATS_ITEM(tab, leftIndex, itemIndex, label, rightLabel, hudColor)
 	{
 		this.PauseMenu.Tabs[tab].LeftItemList[leftIndex].ItemList[itemIndex].updateItem(label,rightLabel,hudColor);
+	}
+	
+	function UPDATE_KEYMAP_ITEM(tab, leftIndex, itemIndex, value1, value2)
+	{
+		this.PauseMenu.Tabs[tab].LeftItemList[leftIndex].ItemList[itemIndex].UpdateValues(value1, value2);
 	}
 
 	function SET_INPUT_EVENT(direction)
