@@ -7,12 +7,10 @@
 	var mIndex:Number = 0;
 	var getNextHighestDepth;
 	var PMB;
-	var _alpha;
 	var _highlight;
 	var _menuenum;
 	var _mywidth;
 	var _rollover;
-	var hasMouse;
 	var lockMC;
 	var tabMC;
 	var textMC;
@@ -26,40 +24,8 @@
 		this.tabMC._alpha = 0;
 		this.rollover = false;
 		this.mycolour = com.rockstargames.ui.utils.HudColour.HUD_COLOUR_FREEMODE;
-		this.hasMouse = false;
 	}
 
-	function init()
-	{
-		this.addMouse();
-	}
-
-	function addMouse()
-	{
-		this.mc.onRelease = mx.utils.Delegate.create(this, this.mPress);
-		this.mc.onRollOver = mx.utils.Delegate.create(this, this.mRollOver);
-		this.mc.onRollOut = mx.utils.Delegate.create(this, this.mRollOut);
-		this.mc.onDragOut = mx.utils.Delegate.create(this, this.mRollOut);
-		this.hasMouse = true;
-	}
-	function removeMouse()
-	{
-		delete this.mc.onRelease;
-		delete this.mc.onRollOver;
-		delete this.mc.onRollOut;
-		this.hasMouse = false;
-	}
-	function mPress()
-	{
-		if (!this.highlight)
-		{
-			this.PMB.SET_CODE_MENU_INDEX(this.mIndex);
-		}
-		else
-		{
-			this.PMB.SET_CODE_MENU_SELECT();
-		}
-	}
 	function mRollOver()
 	{
 		if (!this.isLocked && !this.highlight)
@@ -205,6 +171,7 @@
 			var __reg4 = 2;
 			__reg2 = this._mywidth * widthSpan + __reg4 * (widthSpan - 1);
 			this.tabMC._width = this.mc.bgMC._width = this.mc.rolloverMC._width = __reg2;
+			this._mywidth = __reg2;
 		}
 		this.textMC.labelTF._x = __reg2 / 2 - this.textMC.labelTF._width / 2 - 1;
 		this.lockMC._x = this.textMC.labelTF._x + this.textMC.labelTF._width + 5;

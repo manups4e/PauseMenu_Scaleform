@@ -18,17 +18,16 @@
 	var SCROLL_DURATION = 0.2;
 	var SCROLL_DY = 27;
 	var footerMC;
+	var parentTab;
 
-	function TabLeftItem(mc, leftLabel, type, param1, param2, param3, param4)
+	function TabLeftItem(parent, leftLabel, type, enabled, param1, param2, param3, param4)
 	{
-		this._MC = mc;
+		this.parentTab = parent;
+		this._MC = this.parentTab._MC;
 		this.ItemList = new Array();
-		this.leftItem = new com.rockstargames.NativeUI.items.UIMenuItem(leftLabel, "", this._MC, param1, param2, param3, param4);
-
-		// RIMUOVERE CON CODICE SCRIPT E SCALE
-		this.leftItem._textColor = com.rockstargames.ui.utils.HudColour.HUD_COLOUR_WHITE;
-		this.leftItem._textHighlightColor = com.rockstargames.ui.utils.HudColour.HUD_COLOUR_BLACK;
-		// RIMUOVERE CON CODICE SCRIPT E SCALE
+		this.leftItem = new com.rockstargames.ScaleformUI.items.UIMenuItem(0, leftLabel, "", this._MC, true, false, 117, 1, 1, 2, param1, param2, param3, param4);
+		this.leftItem.itemMC.attachMovie("mouseCatcher","mouseCatcher",this.leftItem.itemMC.getNextHighestDepth(),{_width:this.leftItem.itemMC._width, _height:this.leftItem.itemMC._height});
+		this.leftItem.itemMC.mouseCatcher.setupGenericMouseInterface(this.parentTab.LeftItemList.length,1,this.onMouseEvent,[this.leftItem, this, 1]);
 
 		this.leftItem.highlighted = false;
 		this.itemType = type;
@@ -73,22 +72,20 @@
 		this.footerMC._x = 290;
 		this.footerMC._y = 432;
 		this.footerMC._visible = false;
+		this.Enabled = enabled;
 	}
 
 	function AddTitle(txt, param1, param2)
 	{
 		if (this.itemType != 0 && this.itemType != 2 && this.itemType != 3 && this.itemType != 4)
 		{
-			if (this._title == undefined)
-			{
-				this._title = new com.rockstargames.PauseMenu.items.BasicTabItem(this.scrollableContent);
-				var size = 50;
-				this._title.itemMC.labelMC.titleTF.autoSize = "left";
-				this._title.itemMC.labelMC.titleTF.multiline = false;
-				this._title.itemMC.labelMC.titleTF.htmlText = "<font face=\'$Font2\' size=\'" + size + "\'>" + txt + "</font>";
-				this._title.itemMC._y = 5;
-				this._title.snapBGGrid(this._title.bgMC);
-			}
+			this._title = new com.rockstargames.PauseMenu.items.BasicTabItem(this.scrollableContent);
+			var size = 50;
+			this._title.itemMC.labelMC.titleTF.autoSize = "left";
+			this._title.itemMC.labelMC.titleTF.multiline = false;
+			this._title.itemMC.labelMC.titleTF.htmlText = "<font face=\'$Font2\' size=\'" + size + "\'>" + txt + "</font>";
+			this._title.itemMC._y = 5;
+			this._title.snapBGGrid(this._title.bgMC);
 		}
 		else if (this.itemType == 4)
 		{
@@ -118,6 +115,8 @@
 					break;
 				case 2 :
 					item = new com.rockstargames.PauseMenu.items.SettingsTabItem(this.scrollableContent, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
+					item.itemMC.attachMovie("mouseCatcher","mouseCatcher",item.itemMC.getNextHighestDepth(),{_width:item.itemMC._width, _height:item.itemMC._height});
+					item.itemMC.mouseCatcher.setupGenericMouseInterface(this.ItemList.length,2,this.onMouseEvent,[item, this, 2]);
 					break;
 				case 3 :
 					item = new com.rockstargames.PauseMenu.items.KeymapItem(this.rightMenuUp, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
@@ -134,11 +133,11 @@
 		var _th = (this._title == undefined) ? (this.itemType == 2 || this.itemType == 3) ? 0 : 5 : this._title.itemMC._y + this._title.itemMC.bgMC._height;
 		for (var it in this.ItemList)
 		{
-			var oldItemY = it > 0 ? this.ItemList[it - 1].itemMC._y : 0;
-			var oldItemH = it > 0 ? this.ItemList[it - 1].itemMC._height : 0;
+			var oldItemY = (it > 0) ? this.ItemList[it - 1].itemMC._y : 0;
+			var oldItemH = (it > 0) ? this.ItemList[it - 1].itemMC._height : 0;
 			if (it == 0)
 			{
-				this.ItemList[it].itemMC._y = _th + 2;
+				this.ItemList[it].itemMC._y = (_th > 0) ? _th + 2 : _th;
 				if (this.itemType == 4)
 				{
 					this.ItemList[it].itemMC._y = this.rightMenuUp.bgMC._y;
@@ -172,6 +171,63 @@
 			{
 				this.scrollableContent._y = -(this.viewHeight - this.viewMaskHeight);
 			}
+		}
+	}
+
+	function onMouseEvent(evtType, targetMC, args)
+	{
+		var item = args[0];
+		var leftItem = args[1];
+		var parentTab = leftItem.parentTab;
+		if (!parentTab.focused)
+		{
+			if (args[2] == 1)
+			{
+				item.mOut();
+			}
+			else if (args[2] == 2)
+			{
+				item.mOutItem();
+			}
+			return;
+		}
+
+		switch (evtType)
+		{
+			case com.rockstargames.ui.mouse.MOUSE_EVENTS.MOUSE_ROLL_OVER :
+				if (args[2] == 1)
+				{
+					if (item._type == 6)
+					{
+						if (item.jumpable)
+						{
+							return;
+						}
+					}
+					item.mOver();
+				}
+				else if (args[2] == 2)
+				{
+					item.mOverItem();
+				}
+				break;
+			case com.rockstargames.ui.mouse.MOUSE_EVENTS.MOUSE_ROLL_OUT :
+				if (args[2] == 1)
+				{
+					item.mOut();
+				}
+				else if (args[2] == 2)
+				{
+					item.mOutItem();
+				}
+				break;
+			case com.rockstargames.ui.mouse.MOUSE_EVENTS.MOUSE_PRESS :
+				break;
+			case com.rockstargames.ui.mouse.MOUSE_EVENTS.MOUSE_RELEASE :
+				break;
+			case com.rockstargames.ui.mouse.MOUSE_EVENTS.MOUSE_RELEASE_OUTSIDE :
+				item.mOut();
+				break;
 		}
 	}
 
@@ -334,5 +390,37 @@
 			return this.ItemList[this.currentSelection];
 		}
 		return undefined;
+	}
+
+	function set Label(_l)
+	{
+		this.leftItem.leftTextTF.autoSize = "none";
+		com.rockstargames.ui.utils.UIText.setSizedText(this.leftItem.leftTextTF,_l,true);
+	}
+
+	function set RightLabel(_l)
+	{
+		this.leftItem.SetRightText(_l);
+	}
+
+	function SetLeftBadge(i)
+	{
+		this.leftItem.SetLeftBadge(i);
+	}
+
+	function SetRightBadge(i)
+	{
+		this.leftItem.SetRightBadge(i);
+	}
+
+	function set Enabled(e)
+	{
+		this.leftItem.Enabled = e;
+		com.rockstargames.ui.utils.Colour.ApplyHudColourToTF(this.leftItem.rightTextTF,this.leftItem.Enabled ? (this.leftItem.highlighted ? this.leftItem._textColor : this.leftItem._textHighlightColor) : com.rockstargames.ui.utils.HudColour.HUD_COLOUR_GREY);
+	}
+
+	function get Enabled()
+	{
+		return this.leftItem.Enabled;
 	}
 }

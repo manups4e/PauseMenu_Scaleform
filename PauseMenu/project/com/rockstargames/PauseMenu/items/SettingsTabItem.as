@@ -28,8 +28,9 @@
 	var txd_loader;
 	var _checkBoxHovered;
 	var _hovered;
+	var _enabled = true;
 
-	function SettingsTabItem(mc, type, label, rightLabel, index, param5, param6, param7, param8, param9, param10)
+	function SettingsTabItem(mc, type, label, enabled, rightLabel, index, param5, param6, param7, param8, param9)
 	{
 		this.itemMC = mc.attachMovie("settingsListItem", "settings_item_" + mc.getNextHighestDepth(), mc.getNextHighestDepth());
 		this.itemTextLeft = this.itemMC.labelMC.titleTF;
@@ -150,9 +151,10 @@
 		com.rockstargames.ui.utils.Colour.Colourise(this.highlightMC,__reg5.r,__reg5.g,__reg5.b,__reg5.a);
 		this.bgMC._visible = false;
 		this.highlighted = false;
-		this.itemMC.onRollOver = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOverItem, this.itemMC);
-		this.itemMC.onRollOut = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOutItem, this.itemMC);
-		this.itemMC.onDragOut = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOutItem, this.itemMC);
+		this.Enabled = enabled;
+		//this.itemMC.onRollOver = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOverItem, this.itemMC);
+		//this.itemMC.onRollOut = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOutItem, this.itemMC);
+		//this.itemMC.onDragOut = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOutItem, this.itemMC);
 	}
 
 	function set barscale(bi)
@@ -238,59 +240,62 @@
 
 	function set highlighted(_h)
 	{
-		this.itemMC.highlightMC._visible = _h;
-		var __reg3 = new com.rockstargames.ui.utils.HudColour();
-		var __reg2 = new com.rockstargames.ui.utils.HudColour();
-		var __reg4 = 100;
-		var __reg5 = false;
-		if (_h)
+		if (this._enabled)
 		{
-			if (this.itemMC.highlightMC._alpha < 100)
+			this.itemMC.highlightMC._visible = _h;
+			var __reg3 = new com.rockstargames.ui.utils.HudColour();
+			var __reg2 = new com.rockstargames.ui.utils.HudColour();
+			var __reg4 = 100;
+			var __reg5 = false;
+			if (_h)
 			{
-				this.itemMC.highlightMC._alpha = 100;
+				if (this.itemMC.highlightMC._alpha < 100)
+				{
+					this.itemMC.highlightMC._alpha = 100;
+				}
+				com.rockstargames.ui.utils.Colour.setHudColour(com.rockstargames.ui.utils.HudColour.HUD_COLOUR_PAUSE_BG,__reg3);
+				com.rockstargames.ui.utils.Colour.setHudColour(com.rockstargames.ui.utils.HudColour.HUD_COLOUR_BLACK,__reg2);
+				if (this._type == 1 && __reg5 == false)
+				{
+					this.labelMC.rMC._visible = this.labelMC.lMC._visible = true;
+					this.itemTextRight._x = this.labelMC.rMC._x - this.itemTextRight._width - 2;
+					this.labelMC.lMC._x = this.itemTextRight._x - 2;
+				}
+				else if (this._type == 2 || this._type == 3 || this._type == 5)
+				{
+					this.barMC._alpha = 100;
+				}
+				else if (this._type == 4)
+				{
+					var sprite_name = this.getSprite(true, this.tickStyle, this.Checked);
+					this.SetClip(this.checkbox,"commonmenu",sprite_name);
+				}
 			}
-			com.rockstargames.ui.utils.Colour.setHudColour(com.rockstargames.ui.utils.HudColour.HUD_COLOUR_PAUSE_BG,__reg3);
-			com.rockstargames.ui.utils.Colour.setHudColour(com.rockstargames.ui.utils.HudColour.HUD_COLOUR_BLACK,__reg2);
-			if (this._type == 1 && __reg5 == false)
+			else
 			{
-				this.labelMC.rMC._visible = this.labelMC.lMC._visible = true;
-				this.itemTextRight._x = this.labelMC.rMC._x - this.itemTextRight._width - 2;
-				this.labelMC.lMC._x = this.itemTextRight._x - 2;
+				com.rockstargames.ui.utils.Colour.setHudColour(com.rockstargames.ui.utils.HudColour.HUD_COLOUR_WHITE,__reg3);
+				com.rockstargames.ui.utils.Colour.setHudColour(this.defaultLabelColourEnum,__reg2);
+				if (this._type == 1)
+				{
+					this.labelMC.rMC._visible = this.labelMC.lMC._visible = false;
+				}
+				else if (this._type == 2 || this._type == 3 || this._type == 5)
+				{
+					this.barMC._alpha = 30;
+				}
+				else if (this._type == 4)
+				{
+					var sprite_name = this.getSprite(false, this.tickStyle, this.Checked);
+					this.SetClip(this.checkbox,"commonmenu",sprite_name);
+				}
+				this.itemTextRight._x = this.highlightMC._width - this.itemTextRight._width - 6;
 			}
-			else if (this._type == 2 || this._type == 3 || this._type == 5)
+			if (this.labelMC != undefined)
 			{
-				this.barMC._alpha = 100;
+				com.rockstargames.ui.utils.Colour.Colourise(this.labelMC,__reg2.r,__reg2.g,__reg2.b,__reg4);
 			}
-			else if (this._type == 4)
-			{
-				var sprite_name = this.getSprite(true, this.tickStyle, this.Checked);
-				this.SetClip(this.checkbox,"commonmenu",sprite_name);
-			}
+			com.rockstargames.ui.utils.Colour.Colourise(this.highlightMC,__reg3.r,__reg3.g,__reg3.b,__reg3);
 		}
-		else
-		{
-			com.rockstargames.ui.utils.Colour.setHudColour(com.rockstargames.ui.utils.HudColour.HUD_COLOUR_WHITE,__reg3);
-			com.rockstargames.ui.utils.Colour.setHudColour(this.defaultLabelColourEnum,__reg2);
-			if (this._type == 1)
-			{
-				this.labelMC.rMC._visible = this.labelMC.lMC._visible = false;
-			}
-			else if (this._type == 2 || this._type == 3 || this._type == 5)
-			{
-				this.barMC._alpha = 30;
-			}
-			else if (this._type == 4)
-			{
-				var sprite_name = this.getSprite(false, this.tickStyle, this.Checked);
-				this.SetClip(this.checkbox,"commonmenu",sprite_name);
-			}
-			this.itemTextRight._x = this.highlightMC._width - this.itemTextRight._width - 6;
-		}
-		if (this.labelMC != undefined)
-		{
-			com.rockstargames.ui.utils.Colour.Colourise(this.labelMC,__reg2.r,__reg2.g,__reg2.b,__reg4);
-		}
-		com.rockstargames.ui.utils.Colour.Colourise(this.highlightMC,__reg3.r,__reg3.g,__reg3.b,__reg3);
 		this._highlighted = _h;
 	}
 
@@ -311,11 +316,14 @@
 
 	function mOverItem(mc)
 	{
-		this._hovered = true;
-		if (!this._highlighted)
+		if (this.Enabled)
 		{
-			this.highlightMC._visible = true;
-			this.highlightMC._alpha = 20;
+			this._hovered = true;
+			if (!this._highlighted)
+			{
+				this.highlightMC._visible = true;
+				this.highlightMC._alpha = 20;
+			}
 		}
 	}
 	function mOutItem(mc)
@@ -394,5 +402,16 @@
 				this.sliderscale = value;
 				break;
 		}
+	}
+
+	function set Enabled(e)
+	{
+		this._enabled = e;
+		com.rockstargames.ui.utils.Colour.ApplyHudColourToTF(this.itemTextRight,this._enabled ? this.defaultLabelColourEnum : com.rockstargames.ui.utils.HudColour.HUD_COLOUR_GREY);
+		com.rockstargames.ui.utils.Colour.ApplyHudColourToTF(this.itemTextLeft,this._enabled ? this.defaultLabelColourEnum : com.rockstargames.ui.utils.HudColour.HUD_COLOUR_GREY);
+	}
+	function get Enabled()
+	{
+		return this._enabled;
 	}
 }

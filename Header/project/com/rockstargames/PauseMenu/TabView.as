@@ -15,7 +15,7 @@
 		this.Header = new com.rockstargames.PauseMenu.header.Header(this.CONTENT);// y_:60...
 		//this.Header.BuildMenu();
 		this._focusLevel = 0;
-		this.Index = 1;
+		this.Index = 0;
 	}
 
 	function SetTitle(title, subtitle, isChallenge)
@@ -34,8 +34,8 @@
 		this.Header.ShowHeadingDetails(true);
 	}
 
-	function AddTab(title)
+	function AddTab(title, dim)
 	{
-		this.Header.menubar.AddItem(title);
+		this.Header.menubar.AddItem(title, dim);
 	}
 }

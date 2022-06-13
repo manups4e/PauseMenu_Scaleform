@@ -37,6 +37,11 @@
 
 	function AddTab(tabType)
 	{
+		if (this.CONTENT.mouseCatcher)
+		{
+			this.CONTENT.mouseCatcher.dispose();
+			this.CONTENT.mouseCatcher.removeMovieClip();
+		}
 		var tab;
 		switch (tabType)
 		{
@@ -46,17 +51,28 @@
 			case 1 :
 				tab = new com.rockstargames.PauseMenu.tabs.InfoTab(this.CONTENT, this.Tabs.length);
 				break;
+			case 2 :
+				tab = new com.rockstargames.PauseMenu.tabs.PlayerListTab(this.CONTENT, this.Tabs.length);
+				break;
 		}
 		this.Tabs.push(tab);
 		this.updateTabsDrawing();
+		if (this._focusLevel == 0)
+		{
+			if (!this.CONTENT.mouseCatcher)
+			{
+				this.CONTENT.attachMovie("mouseCatcher","mouseCatcher",this.CONTENT.getNextHighestDepth(),{_width:this.CONTENT._width, _height:this.CONTENT._height});
+				this.CONTENT.mouseCatcher.setupGenericMouseInterface(-1,0,this.onMouseEvent,[this]);
+			}
+		}
 	}
 
-	function AddLeftItem(tab, type, str, param1, param2, param3, param4)
+	function AddLeftItem(tab, type, str, enabled, param1, param2, param3, param4)
 	{
 		var tab = this.Tabs[tab];
 		if (!(tab instanceof com.rockstargames.PauseMenu.tabs.SimpleTab))
 		{
-			tab.AddLeftItemToList(str,type,param1,param2,param3,param4);
+			tab.AddLeftItemToList(str,type,enabled,param1,param2,param3,param4);
 		}
 		this.updateTabsDrawing();
 	}
@@ -106,7 +122,19 @@
 			case 1 :
 				if (!(curTab instanceof com.rockstargames.PauseMenu.tabs.SimpleTab))
 				{
-					curTab.currentSelection--;
+					if (curTab instanceof com.rockstargames.PauseMenu.tabs.PlayerListTab)
+					{
+						return curTab.GoUp(150);
+					}
+					else
+					{
+						curTab.currentSelection--;
+						while (!curTab.currentItem.Enabled)
+						{
+							curTab.currentSelection--;
+						}
+						return curTab.currentSelection;
+					}
 				}
 				break;
 			case 2 :
@@ -115,10 +143,16 @@
 					if (focus == 2)
 					{
 						curTab.currentItem.currentSelection--;
+						while (!curTab.currentItem.currentItem.Enabled)
+						{
+							curTab.currentItem.currentSelection--;
+						}
+						return curTab.currentItem.currentSelection;
 					}
 				}
 				break;
 		}
+		return -1;
 	}
 
 	function GoDown()
@@ -130,7 +164,19 @@
 			case 1 :
 				if (!(curTab instanceof com.rockstargames.PauseMenu.tabs.SimpleTab))
 				{
-					curTab.currentSelection++;
+					if (curTab instanceof com.rockstargames.PauseMenu.tabs.PlayerListTab)
+					{
+						return curTab.GoDown(150);
+					}
+					else
+					{
+						curTab.currentSelection++;
+						while (!curTab.currentItem.Enabled)
+						{
+							curTab.currentSelection++;
+						}
+						return curTab.currentSelection;
+					}
 				}
 				break;
 			case 2 :
@@ -139,20 +185,35 @@
 					if (focus == 2)
 					{
 						curTab.currentItem.currentSelection++;
+						while (!curTab.currentItem.currentItem.Enabled)
+						{
+							curTab.currentItem.currentSelection++;
+						}
+
+						return curTab.currentItem.currentSelection;
 					}
 				}
 				break;
 		}
+		return -1;
 	}
 
 	function GoLeft()
 	{
 		var focus = this.Focus;
 		var curTab = this.currentTab;
+		var val = -1;
 		switch (focus)
 		{
 			case 0 :
 				this.Index--;
+				val = this.Index;
+				break;
+			case 1 :
+				if (curTab instanceof com.rockstargames.PauseMenu.tabs.PlayerListTab)
+				{
+					return curTab.GoLeft(150);
+				}
 				break;
 			case 2 :
 				var curItem = curTab.currentItem;
@@ -162,28 +223,40 @@
 					{
 						case 1 :
 							curItem.currentItem.textIndex--;
+							val = curItem.currentItem.textIndex;
 							break;
 						case 2 :
 						case 3 :
 							curItem.currentItem.barscale--;
+							val = curItem.currentItem.barscale;
 							break;
 						case 5 :
 							curItem.currentItem.sliderscale--;
+							val = curItem.currentItem.sliderscale;
 							break;
 					}
 				}
 				break;
 		}
+		return val;
 	}
 
 	function GoRight()
 	{
 		var focus = this.Focus;
 		var curTab = this.currentTab;
+		var val = -1;
 		switch (focus)
 		{
 			case 0 :
 				this.Index++;
+				val = this.Index;
+			case 1 :
+				if (curTab instanceof com.rockstargames.PauseMenu.tabs.PlayerListTab)
+				{
+					return curTab.GoRight(150);
+				}
+				break;
 			case 2 :
 				var curItem = curTab.currentItem;
 				if (curItem.currentItem instanceof com.rockstargames.PauseMenu.items.SettingsTabItem)
@@ -192,18 +265,22 @@
 					{
 						case 1 :
 							curItem.currentItem.textIndex++;
+							val = curItem.currentItem.textIndex;
 							break;
 						case 2 :
 						case 3 :
 							curItem.currentItem.barscale++;
+							val = curItem.currentItem.barscale;
 							break;
 						case 5 :
 							curItem.currentItem.sliderscale++;
+							val = curItem.currentItem.sliderscale;
 							break;
 					}
 				}
 				break;
 		}
+		return val;
 	}
 
 	function set Index(_i)
@@ -235,6 +312,22 @@
 			this._focusLevel = 0;
 		}
 		this.currentTab.focused = this._focusLevel == 0 ? false : true;
+		if (this._focusLevel == 0)
+		{
+			if (!this.CONTENT.mouseCatcher)
+			{
+				this.CONTENT.attachMovie("mouseCatcher","mouseCatcher",this.CONTENT.getNextHighestDepth(),{_width:this.CONTENT._width, _height:this.CONTENT._height});
+				this.CONTENT.mouseCatcher.setupGenericMouseInterface(-1,0,this.onMouseEvent,[this]);
+			}
+		}
+		else
+		{
+			if (this.CONTENT.mouseCatcher)
+			{
+				this.CONTENT.mouseCatcher.dispose();
+				this.CONTENT.mouseCatcher.removeMovieClip();
+			}
+		}
 	}
 
 	function get Focus()
@@ -245,5 +338,24 @@
 	function get currentTab()
 	{
 		return this.Tabs[this.Index];
+	}
+
+	function onMouseEvent(evtType, targetMC, args)
+	{
+		var tabView = args[0];
+
+		switch (evtType)
+		{
+			case com.rockstargames.ui.mouse.MOUSE_EVENTS.MOUSE_ROLL_OUT :
+				break;
+			case com.rockstargames.ui.mouse.MOUSE_EVENTS.MOUSE_ROLL_OVER :
+				break;
+			case com.rockstargames.ui.mouse.MOUSE_EVENTS.MOUSE_PRESS :
+				break;
+			case com.rockstargames.ui.mouse.MOUSE_EVENTS.MOUSE_RELEASE :
+				break;
+			case com.rockstargames.ui.mouse.MOUSE_EVENTS.MOUSE_RELEASE_OUTSIDE :
+				break;
+		}
 	}
 }

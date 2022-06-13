@@ -20,7 +20,7 @@
 	function Header(mc)
 	{
 		this.CONTENT = mc;
-		this.menubar = com.rockstargames.PauseMenu.header.PauseMenuBar(this.CONTENT.attachMovie("menu", "menuMC", this.CONTENT.getNextHighestDepth(), {_y:60}));
+		this.menubar = this.CONTENT.attachMovie("menu", "menuMC", this.CONTENT.getNextHighestDepth(), {_y:60});
 		this.menubar.INITIALIZE(mc);
 		this.detailsMC = this.CONTENT.headerMC.alldetailsMC.detailsMC;
 		this.charMC = this.CONTENT.headerMC.alldetailsMC.charMC;
@@ -282,7 +282,7 @@
 				var __reg3 = 3;
 				var __reg2 = String(this.crewImgLoaderMC).split(".");
 				var __reg4 = __reg2.slice(__reg2.length - __reg3).join(".");
-				this.crewImgLoaderMC.addTxdRef(__reg4,this.loadedCrewImg,this);
+				this.crewImgLoaderMC.requestTxdRef(__reg4,false,this.loadedCrewImg,this);
 				this.crewImgLoaderMC._alpha = 0;
 			}
 			this.crewMC._visible = true;

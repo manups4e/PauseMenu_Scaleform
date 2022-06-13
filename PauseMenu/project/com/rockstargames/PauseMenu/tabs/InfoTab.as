@@ -8,9 +8,9 @@
 		super(mc,val);
 	}
 
-	function AddLeftItemToList(str, rightType, param1, param2, param3, param4)
+	function AddLeftItemToList(str, rightType, enabled, param1, param2, param3, param4)
 	{
-		var item = new com.rockstargames.PauseMenu.tabs.TabLeftItem(this._MC, str, rightType, param1, param2, param3, param4);
+		var item = new com.rockstargames.PauseMenu.tabs.TabLeftItem(this, str, rightType, enabled, param1, param2, param3, param4);
 		item.leftItem.itemMC._y = this.LeftItemList.length * 27;
 		this.LeftItemList.push(item);
 		this.updateItems();
@@ -18,7 +18,7 @@
 
 	function AddTitle(it, txt, param2, param3)
 	{
-		this.LeftItemList[it].AddTitle(txt, param2, param3);
+		this.LeftItemList[it].AddTitle(txt,param2,param3);
 	}
 
 	function AddItem(it, _type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10)
@@ -30,8 +30,8 @@
 	{
 		for (var item in this.LeftItemList)
 		{
-			this.LeftItemList[item].Selected = this.isVisible ? (item == this.currentSelection) : false;
-			this.LeftItemList[item].highlighted = this.focused ? (item == this.currentSelection) : false;
+			this.LeftItemList[item].Selected = this.isVisible ? this.LeftItemList[item].Enabled ? (item == this.currentSelection) : false : false;
+			this.LeftItemList[item].highlighted = this.focused ? this.LeftItemList[item].Enabled ? (item == this.currentSelection) : false : false;
 			this.LeftItemList[item].updateItemList();
 			if (this.LeftItemList[item].itemType == 2)
 			{
@@ -81,6 +81,11 @@
 			}
 		}
 		this.updateItems();
+	}
+
+	function get focused()
+	{
+		return super.focused;
 	}
 
 	function set currentSelection(val)

@@ -5,42 +5,34 @@
 	function UIText()
 	{
 	}
-	static function setSizedText(tf, str, autoShrink, autoSize, font, sizeOffset, sizeOverride)
+	static function setSizedText(tf, str, autoShrink, autoSize, sizeOffset, sizeOverride)
 	{
 		tf.wordWrap = false;
 		tf.multiline = false;
 		tf.html = true;
-		var _loc3_ = 0;
+		var __reg3 = 0;
 		if (sizeOffset != undefined)
 		{
-			_loc3_ = sizeOffset;
+			__reg3 = sizeOffset;
 		}
-		var _loc2_ = com.rockstargames.ui.utils.UIText.SIZE - _loc3_;
+		var __reg2 = com.rockstargames.ui.utils.UIText.SIZE - __reg3;
 		if (sizeOverride != undefined)
 		{
-			_loc2_ = sizeOverride;
+			__reg2 = sizeOverride;
 		}
-		var _font;
-		if (font != undefined)
-		{
-			_font = font;
-		}
-		else
-		{
-			_font = "$Font2";
-
-		}
-		tf.htmlText = "<FONT FACE=\'" + _font + "\' SIZE=\'" + _loc2_ + "\'>" + str + "</FONT>";
+		tf.htmlText = "<FONT SIZE=\'" + __reg2 + "\'>" + str + "</FONT>";
 		tf.verticalAlign = "center";
 		if (autoShrink)
 		{
 			tf.textAutoSize = "shrink";
+			return;
 		}
-		else if (autoSize)
+		if (autoSize)
 		{
 			tf.autoSize = true;
 		}
 	}
+
 	static function setDescText(tf, str, font, autoSize)
 	{
 		tf.wordWrap = true;

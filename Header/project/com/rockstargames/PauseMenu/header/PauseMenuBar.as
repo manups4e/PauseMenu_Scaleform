@@ -13,6 +13,7 @@
 	var headerContainerMC;
 	var leftArrowMouseCatcherMC;
 	var rightArrowMouseCatcherMC;
+	var allHighlightsOn;
 
 	function PauseMenuBar()
 	{
@@ -33,13 +34,23 @@
 		this.headerContainerMC = this.CONTENT.createEmptyMovieClip("menuContainerMC", this.CONTENT.getNextHighestDepth());
 	}
 
-	function AddItem(_title)
+	function AddItem(_title, dim, color)
 	{
-		var menuItem = com.rockstargames.PauseMenu.header.BarItem(this.headerContainerMC.attachMovie("PauseBarMenuItem", "pauseBarMenuItem" + (this.menuItemList.length + 1), this.headerContainerMC.getNextHighestDepth()));
+		var menuItem = this.headerContainerMC.attachMovie("PauseBarMenuItem", "pauseBarMenuItem" + (this.menuItemList.length + 1), this.headerContainerMC.getNextHighestDepth());
 		menuItem.label = _title;
 		menuItem.menuenum = this.menuItemList.length;
-		menuItem._x = menuItem.menuenum * (this.menuItemWidth + this.menuItemSpacing);
+		menuItem.width = this.menuItemWidth;
+		menuItem.realignText(dim);
+		if (menuItem.menuenum == 0)
+		{
+			menuItem._x = 0;
+		}
+		else
+		{
+			menuItem._x = menuItemList[this.menuItemList.length - 1]._x + menuItemList[this.menuItemList.length - 1].width + this.menuItemSpacing;
+		}
 		menuItem.init();
+		menuItem.mycolour = color;
 		if (menuItem.menuenum == this.menuIndex)
 		{
 			menuItem.highlight = true;
@@ -48,13 +59,34 @@
 		{
 			menuItem.highlight = false;
 		}
-		menuItem.width = this.menuItemWidth;
 		menuItem.rollover = false;
+		menuItem.attachMovie("mouseCatcher","mouseCatcher",menuItem.getNextHighestDepth(),{_width:menuItem._width, _height:menuItem._height});
+		menuItem.mouseCatcher.setupGenericMouseInterface(this.menuItemList.length,-1,this.onMouseEvent,[menuItem, this]);
 		this.menuItemList.push(menuItem);
 		if (this.menuItemList.length > 6)
 		{
 			this.leftArrowMouseCatcherMC = this.createArrowMouseCatcher(-20 - this.menuItemSpacing, 8, 20, 20, this.onLeftArrowClick);
+			this.leftArrowMouseCatcherMC.attachMovie("mouseCatcher", "mouseCatcher", this.leftArrowMouseCatcherMC.getNextHighestDepth(), {_width:this.leftArrowMouseCatcherMC._width, _height:this.leftArrowMouseCatcherMC._height});
+			this.leftArrowMouseCatcherMC.mouseCatcher.setupGenericMouseInterface(0,-1);
+
 			this.rightArrowMouseCatcherMC = this.createArrowMouseCatcher((this.menuItemWidth + this.menuItemSpacing) * this.visibleItems, 8, 20, 20, this.onRightArrowClick);
+			this.rightArrowMouseCatcherMC.attachMovie("mouseCatcher", "mouseCatcher", this.rightArrowMouseCatcherMC.getNextHighestDepth(), {_width:this.rightArrowMouseCatcherMC._width, _height:this.rightArrowMouseCatcherMC._height});
+			this.rightArrowMouseCatcherMC.mouseCatcher.setupGenericMouseInterface(1,-1);
+		}
+	}
+
+	function onMouseEvent(evtType, targetMC, args)
+	{
+		var item = args[0];
+		var bar = args[1];
+		switch (evtType)
+		{
+			case com.rockstargames.ui.mouse.MOUSE_EVENTS.MOUSE_ROLL_OVER :
+				item.mRollOver();
+				break;
+			case com.rockstargames.ui.mouse.MOUSE_EVENTS.MOUSE_ROLL_OUT :
+				item.mRollOut();
+				break;
 		}
 	}
 
@@ -78,17 +110,16 @@
 		_loc2_.lineTo(0,h);
 		_loc2_.lineTo(0,0);
 		_loc2_.endFill();
-		_loc2_._visible = false;
+		_loc2_._visible = true;
 		_loc2_._alpha = 100;
 		_loc2_._x = x;
 		_loc2_._y = y;
-		_loc2_.onRelease = mx.utils.Delegate.create(this, mPress);
 		return _loc2_;
 	}
 
 	function removeArrowMouseCatcher(arrowCatcherMC)
 	{
-		delete arrowCatcherMC.onRelease;
+		arrowCatcherMC.mouseCatcher.dispose();
 		arrowCatcherMC.removeMovieClip();
 	}
 	function onLeftArrowClick()
@@ -144,6 +175,31 @@
 		var __reg8 = this.menuIndex == this.startIndex;
 		var __reg9 = this.menuIndex - this.startIndex == this.visibleItems - 1;
 		this.SET_HEADER_ARROWS_VISIBLE(__reg8,__reg9);
+	}
+
+	function SET_MENU_HEADER_TEXT_BY_INDEX(menuIndex, label, widthSpan)
+	{
+		var _loc2_ = this.menuItemList[menuIndex];
+		_loc2_.label = label;
+		_loc2_.realignText(widthSpan);
+	}
+
+	function SET_ALL_HIGHLIGHTS(hOn, color)
+	{
+		this.allHighlightsOn = hOn;
+		for (var _loc2_ in this.menuItemList)
+		{
+			var _loc3_ = this.menuItemList[_loc2_];
+			if (this.allHighlightsOn)
+			{
+				_loc3_.highlight = true;
+			}
+			else
+			{
+				_loc3_.highlight = this.menuIndex == _loc2_;
+			}
+			_loc3_.bespokeColour = color;
+		}
 	}
 
 	function scrollMenu(x, duration, easetype)

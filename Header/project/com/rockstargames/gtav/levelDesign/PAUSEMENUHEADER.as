@@ -2,6 +2,7 @@
 {
 	var _customBannerLoaded = false;
 	var PauseMenuHeader;
+	static var MouseEnabled = true;
 
 	function PAUSEMENUHEADER()
 	{
@@ -51,9 +52,9 @@
 		this.PauseMenuHeader.ShowHeadingDetails(show);
 	}
 
-	function ADD_HEADER_TAB(title)
+	function ADD_HEADER_TAB(title, dim, color)
 	{
-		this.PauseMenuHeader.menubar.AddItem(title);
+		this.PauseMenuHeader.menubar.AddItem(title,dim,color);
 	}
 
 	function GO_LEFT()
@@ -64,6 +65,41 @@
 	{
 		this.PauseMenuHeader.menubar.onRightArrowClick();
 	}
+	
+	function SET_TAB_INDEX(tab)
+	{
+		this.PauseMenuHeader.menubar.SET_CODE_MENU_INDEX(tab);
+	}
+
+	function SHOW_MENU(bool)
+	{
+		this.PauseMenuHeader.menubar._visible = bool;
+	}
+
+	function SET_MENU_HEADER_TEXT_BY_INDEX(menuIndex, label, widthSpan, forceUpper)
+	{
+		if (forceUpper != undefined)
+		{
+			if (forceUpper == true)
+			{
+				label = label.toUpperCase();
+			}
+		}
+		this.PauseMenuHeader.menubar.SET_MENU_HEADER_TEXT_BY_INDEX(menuIndex,label,widthSpan);
+	}
+	function SET_ALL_HIGHLIGHTS(allHighlights, color)
+	{
+		if (allHighlights)
+		{
+			this.CONTENT.headerMC.bgMC.coronaMC._visible = true;
+		}
+		else
+		{
+			this.CONTENT.headerMC.bgMC.coronaMC._visible = false;
+		}
+		this.PauseMenuHeader.menubar.SET_ALL_HIGHLIGHTS(allHighlights,color);
+	}
+
 
 	function MOUSE_CLICK_EVENT()
 	{
