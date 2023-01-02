@@ -306,7 +306,7 @@
 			if (this._isVisible)
 			{
 				this.ItemList[item].panel.Visible = this.ItemList[item].Selected = this.ItemList[item].highlighted = (item == this.currentSelection);
-				this.ItemList[item].panel.itemMC._x = this._parentMC.rightX;
+				this.ItemList[item].panel.itemMC._x = this._parentMC.rightX + (this.ItemList[item].panel.collapsed ? 144 : 0);
 			}
 			else
 			{

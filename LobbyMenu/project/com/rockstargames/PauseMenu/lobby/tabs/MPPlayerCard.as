@@ -20,12 +20,21 @@
 	var visible = true;
 	var _MC;
 	var parentMC;
-
+	var collapsed;
+	
 	function MPPlayerCard(parent, bCollapse)
 	{
 		this.parentMC = parent;
 		this._MC = this.parentMC.parentMC._MC;
-		this.itemMC = this._MC.attachMovie("mpPlayerCard", "MpPlayerCard", this._MC.getNextHighestDepth());
+		this.collapsed = bCollapse;
+		if (this.collapsed)
+		{
+			this.itemMC = this._MC.attachMovie("playerComparisonCard", "MpPlayerCard", this._MC.getNextHighestDepth());
+		}
+		else
+		{
+			this.itemMC = this._MC.attachMovie("mpPlayerCard", "MpPlayerCard", this._MC.getNextHighestDepth());
+		}
 		this.itemMC._x = this.parentMC._parentMC.missionDetails.OFFSET;
 		this.statMCs = [];
 		com.rockstargames.ui.utils.Colour.ApplyHudColour(this.itemMC.headerBGMC,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_PAUSE_BG);

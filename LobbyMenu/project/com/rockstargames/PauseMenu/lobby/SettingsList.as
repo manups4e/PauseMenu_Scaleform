@@ -439,6 +439,9 @@
 
 	function Clear()
 	{
+		this.BodyMask.removeMovieClip();
+		this.Footer.removeMovieClip();
+		this.DescriptionSprite.removeMovieClip();
 		for (var i in this.ItemList)
 		{
 			this.ItemList[i].Clear();

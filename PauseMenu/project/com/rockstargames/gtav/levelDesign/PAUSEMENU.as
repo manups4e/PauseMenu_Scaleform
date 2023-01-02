@@ -25,7 +25,7 @@
 		this.PauseMenu.Focus = foc;
 	}
 
-	function SET_TAB_INDEX(val, Lval)
+	function SET_TAB_INDEX(val,Lval)
 	{
 		this.PauseMenu.setTabIndex(val,Lval);
 	}
@@ -46,77 +46,85 @@
 		}
 	}
 
-	function ADD_LEFT_ITEM(tab, type, str, enabled, param1, param2, param3, param4)
+	function ADD_LEFT_ITEM(tab,type,str,enabled,param1,param2,param3,param4)
 	{
 		this.PauseMenu.AddLeftItem(tab,type,str,enabled,param1,param2,param3,param4);
 	}
 
-	function ADD_RIGHT_TITLE(tab, leftIndex, param1, param2, param3)
+	function ADD_RIGHT_TITLE(tab,leftIndex,param1,param2,param3)
 	{
 		this.PauseMenu.AddRightTitle(tab,leftIndex,param1,param2,param3);
 	}
 
-	function ADD_RIGHT_LIST_ITEM(tab, leftIndex, type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10)
+	function ADD_RIGHT_LIST_ITEM(tab,leftIndex,type,param1,param2,param3,param4,param5,param6,param7,param8,param9,param10)
 	{
 		this.PauseMenu.AddRightItem(tab,leftIndex,type,param1,param2,param3,param4,param5,param6,param7,param8,param9,param10);
 	}
 
-	function SET_RIGHT_SETTINGS_ITEM_VALUE(tab, leftIndex, itemIndex, value)
+	function SET_RIGHT_SETTINGS_ITEM_VALUE(tab,leftIndex,itemIndex,value)
 	{
 		this.PauseMenu.Tabs[tab].LeftItemList[leftIndex].ItemList[itemIndex].Value = value;
 	}
 
-	function UPDATE_COLORED_BAR_COLOR(tab, leftIndex, itemIndex, hudColor)
+	function UPDATE_COLORED_BAR_COLOR(tab,leftIndex,itemIndex,hudColor)
 	{
 		this.PauseMenu.Tabs[tab].LeftItemList[leftIndex].ItemList[itemIndex].bar.updateColor(hudColor);
 	}
 
-	function UPDATE_RIGHT_ITEM_RIGHT_LABEL(tab, leftIndex, itemIndex, label)
+	function UPDATE_RIGHT_ITEM_RIGHT_LABEL(tab,leftIndex,itemIndex,label)
 	{
 		com.rockstargames.ui.utils.UIText.setSizedText(this.PauseMenu.Tabs[tab].LeftItemList[leftIndex].ItemList[itemIndex].itemTextRight,label);
 	}
 
-	function UPDATE_RIGHT_STATS_ITEM(tab, leftIndex, itemIndex, label, rightLabel, hudColor)
+	function UPDATE_RIGHT_STATS_ITEM(tab,leftIndex,itemIndex,label,rightLabel,hudColor)
 	{
 		this.PauseMenu.Tabs[tab].LeftItemList[leftIndex].ItemList[itemIndex].updateItem(label,rightLabel,hudColor);
 	}
 
-	function UPDATE_KEYMAP_ITEM(tab, leftIndex, itemIndex, value1, value2)
+	function UPDATE_KEYMAP_ITEM(tab,leftIndex,itemIndex,value1,value2)
 	{
 		this.PauseMenu.Tabs[tab].LeftItemList[leftIndex].ItemList[itemIndex].UpdateValues(value1,value2);
 	}
 
-	function UPDATE_LEFT_ITEM_LABEL(tab, item, _label)
+	function UPDATE_LEFT_ITEM_LABELS(tab,item,lbl,rtxt)
+	{
+		if (this.PauseMenu.Tabs[tab].LeftItemList[item]._type == 0)
+		{
+			com.rockstargames.ui.utils.UIText.setSizedText(this.PauseMenu.Tabs[tab].LeftItemList[item].leftTextTF,lbl,true,true);
+			this.PauseMenu.Tabs[tab].LeftItemList[item].SetRightText(rtxt);
+		}
+	}
+	function UPDATE_LEFT_ITEM_LABEL(tab,item,_label)
 	{
 		this.PauseMenu.Tabs[tab].LeftItemList[item].Label = _label;
 	}
 
-	function UPDATE_LEFT_ITEM_LABEL_RIGHT(tab, item, _label)
+	function UPDATE_LEFT_ITEM_LABEL_RIGHT(tab,item,_label)
 	{
-		this.PauseMenu.Tabs[tab].LeftItemList[item].RightLabel = _label;
+		this.PauseMenu.Tabs[tab].LeftItemList[item].SetRightText(_label);
 	}
 
-	function SET_LEFT_ITEM_LEFT_BADGE(tab, item, badge)
+	function SET_LEFT_ITEM_LEFT_BADGE(tab,item,badge)
 	{
 		this.PauseMenu.Tabs[tab].LeftItemList[item].SetLeftBadge(badge);
 	}
 
-	function UPDATE_LEFT_ITEM_TITLE(tab, item, txt, param1, param2)
+	function UPDATE_LEFT_ITEM_TITLE(tab,item,txt,param1,param2)
 	{
-		this.PauseMenu.Tabs[tab].LeftItemList[item].AddTitle;
+		this.PauseMenu.AddRightTitle(tab,item,txt,param1,param2);
 	}
 
-	function SET_LEFT_ITEM_RIGHT_BADGE(tab, item, badge)
+	function SET_LEFT_ITEM_RIGHT_BADGE(tab,item,badge)
 	{
 		this.PauseMenu.Tabs[tab].LeftItemList[item].SetRightBadge(badge);
 	}
 
-	function ENABLE_LEFT_ITEM(tab, item, disable)
+	function ENABLE_LEFT_ITEM(tab,item,disable)
 	{
 		this.PauseMenu.Tabs[tab].LeftItemList[item].Enabled = disable;
 	}
 
-	function ENABLE_RIGHT_ITEM(tab, litem, ritem, disable)
+	function ENABLE_RIGHT_ITEM(tab,litem,ritem,disable)
 	{
 		this.PauseMenu.Tabs[tab].LeftItemList[litem].ItemList[ritem].Enabled = disable;
 	}
@@ -145,7 +153,7 @@
 				switch (this.PauseMenu.Focus)
 				{
 					case 1 :
-						if (this.PauseMenu.currentTab instanceof com.rockstargames.PauseMenu.tabs.PlayerListTab)
+						if (this.PauseMenu.currentTabinstanceofcom.rockstargames.PauseMenu.tabs.PlayerListTab)
 						{
 							switch (this.PauseMenu.currentTab.Focus)
 							{
@@ -153,7 +161,7 @@
 									var curCol = this.PauseMenu.currentTab.currentColumn.column;
 									if (curCol.currentItem._type == 2)
 									{
-										curCol.currentItem.Checked = !curCol.currentItem.Checked;
+										curCol.currentItem.Checked = ! curCol.currentItem.Checked;
 									}
 									break;
 							}
@@ -164,9 +172,10 @@
 							var curItem = this.PauseMenu.currentTab.currentItem;
 							if (curItem.currentItem._type == 4)
 							{
-								curItem.currentItem.Checked = !curItem.currentItem.Checked;
+								curItem.currentItem.Checked = ! curItem.currentItem.Checked;
 								com.rockstargames.ui.game.GameInterface.call("PLAY_SOUND",com.rockstargames.ui.game.GameInterface.GENERIC_TYPE,"SELECT","HUD_FRONTEND_DEFAULT_SOUNDSET");
 							}
+
 						};
 						break;
 				}
@@ -175,22 +184,22 @@
 		}
 	}
 
-	function SET_SCROLL_EVENT(direction, isJoyPad)
+	function SET_SCROLL_EVENT(direction,isJoyPad)
 	{
 		// -1 up , 1 down
 		var focus = this.PauseMenu.Focus;
-		if (focus == 1)
+		if ((focus == 1))
 		{
 			var curTab = this.PauseMenu.currentTab;
 			var curItem = curTab.currentItem;
-			if (!(curTab instanceof com.rockstargames.PauseMenu.tabs.SimpleTab))
+			if (! (curTabinstanceofcom.rockstargames.PauseMenu.tabs.SimpleTab))
 			{
 				if (curItem.panelHovered || isJoyPad)
 				{
 					curItem.scrollAll(direction,true);
 				}
 			}
-			else if (curTab instanceof com.rockstargames.PauseMenu.tabs.SimpleTab)
+			else if ((curTabinstanceofcom.rockstargames.PauseMenu.tabs.SimpleTab))
 			{
 				if (curTab.panelHovered || isJoyPad)
 				{
@@ -217,7 +226,7 @@
 				{
 					for (var j = 0; j < curTab.currentItem.ItemList.length; j++)
 					{
-						if (curTab.currentItem.ItemList[j]._hovered && !curTab.currentItem.ItemList[j]._highlighted)
+						if (curTab.currentItem.ItemList[j]._hovered && ! curTab.currentItem.ItemList[j]._highlighted)
 						{
 							curTab.currentItem.currentSelection = j;
 							this.PauseMenu.Focus++;
@@ -228,12 +237,13 @@
 
 				for (var i = 0; i < curTab.LeftItemList.length; i++)
 				{
-					if (curTab.LeftItemList[i].leftItem._hovered && !curTab.LeftItemList[i].Selected)
+					if (curTab.LeftItemList[i].leftItem._hovered && ! curTab.LeftItemList[i].Selected)
 					{
 						curTab.currentSelection = i;
 						break;
 					}
 				}
+
 				break;
 			case 2 :
 				var curTab = this.PauseMenu.currentTab;
@@ -241,18 +251,19 @@
 
 				for (var i = 0; i < curTab.LeftItemList.length; i++)
 				{
-					if (curTab.LeftItemList[i].leftItem._hovered && !curTab.LeftItemList[i].Selected)
+					if (curTab.LeftItemList[i].leftItem._hovered && ! curTab.LeftItemList[i].Selected)
 					{
 						this.PauseMenu.Focus--;
 						curTab.currentSelection = i;
 						break;
 					}
 				}
+
 				for (var i = 0; i < curItem.ItemList.length; i++)
 				{
 					if (curItem.ItemList[i]._hovered)
 					{
-						if (!curItem.ItemList[i]._highlighted)
+						if (! curItem.ItemList[i]._highlighted)
 						{
 							curItem.currentSelection = i;
 						}
@@ -260,11 +271,12 @@
 						{
 							if (curItem.ItemList[i]._type == 4)
 							{
-								curItem.ItemList[i].Checked = !curItem.ItemList[i].Checked;
+								curItem.ItemList[i].Checked = ! curItem.ItemList[i].Checked;
 							}
 						}
 					}
 				}
+
 				break;
 		}
 		com.rockstargames.ui.game.GameInterface.call("PLAY_SOUND",com.rockstargames.ui.game.GameInterface.GENERIC_TYPE,"SELECT","HUD_FRONTEND_DEFAULT_SOUNDSET");
@@ -293,26 +305,26 @@
 	}
 
 
-	function ADD_PLAYERS_TAB_SETTINGS_ITEM(tab, id, str, sub, enabled, blink, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13)
+	function ADD_PLAYERS_TAB_SETTINGS_ITEM(tab,id,str,sub,enabled,blink,param1,param2,param3,param4,param5,param6,param7,param8,param9,param10,param11,param12,param13)
 	{
 		this.PauseMenu.Tabs[tab].AddSettings(id,str,sub,enabled,blink,param1,param2,param3,param4,param5,param6,param7,param8,param9,param10,param11,param12,param13);
 	}
 
-	function ADD_PLAYERS_TAB_PLAYER_ITEM(tab, id, param0, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13)
+	function ADD_PLAYERS_TAB_PLAYER_ITEM(tab,id,param0,param1,param2,param3,param4,param5,param6,param7,param8,param9,param10,param11,param12,param13)
 	{
 		this.PauseMenu.Tabs[tab].AddPlayer(id,param0,param1,param2,param3,param4,param5,param6,param7,param8,param9,param10,param11,param12,param13);
 	}
 
-	function REMOVE_PLAYERS_TAB_PLAYER_ITEM(tab, id)
+	function REMOVE_PLAYERS_TAB_PLAYER_ITEM(tab,id)
 	{
 		this.PauseMenu.Tabs[tab].RemovePlayer(id);
 	}
 
-	function SET_PLAYERS_TAB_SETTINGS_SELECTION(tab, id)
+	function SET_PLAYERS_TAB_SETTINGS_SELECTION(tab,id)
 	{
 		this.PauseMenu.Tabs[tab].settingsColumn.currentSelection = id;
 	}
-	function SET_PLAYERS_TAB_PLAYERS_SELECTION(tab, id)
+	function SET_PLAYERS_TAB_PLAYERS_SELECTION(tab,id)
 	{
 		this.PauseMenu.Tabs[tab].playersColumn.currentSelection = id;
 	}
@@ -328,47 +340,87 @@
 		this.PauseMenu.Tabs[arguments[0]].playersColumn.ItemList[arguments[1]].panel.AddStatItem(arguments.slice(2));
 	}
 
-	function SET_PLAYERS_TAB_PLAYER_ITEM_PANEL_DESCRIPTION(tab, item, desc, type, unused, collapse)
+	function SET_PLAYERS_TAB_PLAYER_ITEM_PANEL_DESCRIPTION(tab,item,desc,type,unused,collapse)
 	{
 		this.PauseMenu.Tabs[tab].playersColumn.ItemList[item].panel.SET_DESCRIPTION(desc,type,unused,collapse);
 	}
 
-	function SET_PLAYERS_TAB_FOCUS(tab, focus)
+	function SET_PLAYERS_TAB_FOCUS(tab,focus)
 	{
 		this.PauseMenu.Tabs[tab].Focus = focus;
 	}
 
-	function ADD_TXD_REF_RESPONSE(txd, strRef, success)
+	// inizia qui
+	function UPDATE_PLAYERS_TAB_SETTINGS_ITEM_LABELS(tab,item,lbl,rtxt)
 	{
-		if (success == true)
+		if (this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item]._type == 0)
+		{
+			com.rockstargames.ui.utils.UIText.setSizedText(this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].leftTextTF,lbl,true,true);
+			this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].SetRightText(rtxt);
+		}
+	}
+
+	function UPDATE_PLAYERS_TAB_SETTINGS_ITEM_BLINK_DESC(tab,item,blink)
+	{
+		this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].blinkDesc = blink;
+	}
+
+	function UPDATE_PLAYERS_TAB_SETTINGS_ITEM_LABEL(tab,item,txt)
+	{
+		com.rockstargames.ui.utils.UIText.setSizedText(this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].leftTextTF,txt,true,true);
+	}
+
+	function UPDATE_PLAYERS_TAB_SETTINGS_ITEM_LABEL_RIGHT(tab,item,_label)
+	{
+		this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].SetRightText(_label);
+	}
+
+	function SET_PLAYERS_TAB_SETTINGS_ITEM_LEFT_BADGE(tab,item,badge)
+	{
+		this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].SetLeftBadge(badge);
+	}
+
+	function SET_PLAYERS_TAB_SETTINGS_ITEM_RIGHT_BADGE(tab,item,badge)
+	{
+		this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].SetRightBadge(badge);
+	}
+
+	function ENABLE_PLAYERS_TAB_SETTINGS_ITEM(tab,item,disable)
+	{
+		this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].Enabled = disable;
+	}
+
+	function ADD_TXD_REF_RESPONSE(txd,strRef,success)
+	{
+		if ((success == true))
 		{
 			var pMC = this.CONTENT;
-			var il = com.rockstargames.ui.media.ImageLoaderMC(eval(pMC + "." + strRef));
-			if (pMC != undefined)
+			var il = com.rockstargames.ui.media.ImageLoaderMC(eval(((pMC + ".") + strRef)));
+			if ((pMC != undefined))
 			{
 				il.displayTxdResponse(txd);
 			}
 		}
 	}
 
-	function TXD_HAS_LOADED(txd, success, strRef)
+	function TXD_HAS_LOADED(txd,success,strRef)
 	{
-		if (success == true)
+		if ((success == true))
 		{
 			var pMC = this.CONTENT;
-			var il = com.rockstargames.ui.media.ImageLoaderMC(eval(pMC + "." + strRef));
-			if (pMC != undefined)
+			var il = com.rockstargames.ui.media.ImageLoaderMC(eval(((pMC + ".") + strRef)));
+			if ((pMC != undefined))
 			{
 				il.displayTxdResponse(txd,success);
 			}
 		}
 	}
 
-	function TXD_ALREADY_LOADED(txd, strRef)
+	function TXD_ALREADY_LOADED(txd,strRef)
 	{
 		var pMC = this.CONTENT;
-		var il = com.rockstargames.ui.media.ImageLoaderMC(eval(pMC + "." + strRef));
-		if (pMC != undefined)
+		var il = com.rockstargames.ui.media.ImageLoaderMC(eval(((pMC + ".") + strRef)));
+		if ((pMC != undefined))
 		{
 			il.displayTxdResponse(txd,true);
 		}
@@ -379,7 +431,7 @@
 		for (var it in this.PauseMenu.Tabs)
 		{
 			var tab = this.PauseMenu.Tabs[it];
-			if (tab instanceof com.rockstargames.PauseMenu.tabs.SimpleTab)
+			if ((tabinstanceofcom.rockstargames.PauseMenu.tabs.SimpleTab))
 			{
 				for (var ii in tab.ItemList)
 				{
@@ -388,7 +440,7 @@
 				tab._title.itemMC.removeMovieClip();
 				tab.rightItemUpMC.removeMovieClip();
 			}
-			else if (tab instanceof com.rockstargames.PauseMenu.tabs.PlayerListTab)
+			else if ((tabinstanceofcom.rockstargames.PauseMenu.tabs.PlayerListTab))
 			{
 				tab.Clear();
 			}

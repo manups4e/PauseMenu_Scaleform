@@ -180,9 +180,9 @@
 		}
 		if (id == 0)
 		{
-			this.panel = new com.rockstargames.PauseMenu.tabs.playerList.MPPlayerCard(this, false);
-			this.panel.SET_TITLE(args[1],args[2],args[3]);
-			this.panel.SetUpperPanel(args.slice(4));
+			this.panel = new com.rockstargames.PauseMenu.tabs.playerList.MPPlayerCard(this, args[1]);
+			this.panel.SET_TITLE(args[2],args[3],args[4]);
+			this.panel.SetUpperPanel(args.slice(5));
 		}
 		this.parentMC.updateItemsDrawing();
 	}

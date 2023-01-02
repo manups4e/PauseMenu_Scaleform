@@ -20,13 +20,21 @@
 	var visible = true;
 	var _MC;
 	var parentMC;
+	var collapsed;
 
 	function MPPlayerCard(parent, bCollapse)
 	{
 		this.parentMC = parent;
 		this._MC = this.parentMC.parentMC._MC;
-		this.itemMC = this._MC.attachMovie("mpPlayerCard", "MpPlayerCard", this._MC.getNextHighestDepth());
-		this.itemMC._x = this.parentMC._parentMC.missionDetails.OFFSET;
+		this.collapsed = bCollapse;
+		if (this.collapsed)
+		{
+			this.itemMC = this._MC.attachMovie("playerComparisonCard", "MpPlayerCard", this._MC.getNextHighestDepth());
+		}
+		else
+		{
+			this.itemMC = this._MC.attachMovie("mpPlayerCard", "MpPlayerCard", this._MC.getNextHighestDepth());
+		}
 		this.statMCs = [];
 		com.rockstargames.ui.utils.Colour.ApplyHudColour(this.itemMC.headerBGMC,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_PAUSE_BG);
 		com.rockstargames.ui.utils.Colour.ApplyHudColour(this.itemMC.statsBGMC,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_PAUSE_BG);
@@ -47,6 +55,7 @@
 		com.rockstargames.ui.utils.Colour.ApplyHudColour(_loc3_.bgMC,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_PAUSE_BG);
 		com.rockstargames.ui.utils.Colour.ApplyHudColourToTF(this.itemMC.crewInfoMC.crewNameTF,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_WHITE);
 		com.rockstargames.ui.utils.Colour.ApplyHudColourToTF(this.itemMC.crewInfoMC.rankNameTF,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_WHITE);
+		this.itemMC._x = this.parentMC._parentMC.missionDetails.OFFSET + this.collapsed ? 144 : 0;
 		if (bCollapse)
 		{
 			this.RANK_TEXT_CENTER_X = 69;
@@ -183,7 +192,7 @@
 				var __reg9 = args[__reg4] == undefined ? "" : args[__reg4];
 				com.rockstargames.ui.utils.UIText.setSizedText(__reg5,__reg9,true);
 			}
-			////// FARE CODICE PER CUSTOM ICONS   
+			////// FARE CODICE PER CUSTOM ICONS      
 			var __reg8 = args[__reg4 + 1];
 			var __reg7 = this.itemMC["icon" + __reg6 + "MC"];
 			__reg7.gotoAndStop(com.rockstargames.gtav.constants.MPIconLabels.lookUp(__reg8)[1]);
@@ -195,7 +204,7 @@
 					com.rockstargames.ui.utils.Colour.ApplyHudColour(__reg7,args[__reg4 + 2]);
 				}
 			}
-			////// FARE CODICE PER CUSTOM ICONS   
+			////// FARE CODICE PER CUSTOM ICONS      
 			__reg4 = __reg4 + 3;
 			++__reg6;
 		}

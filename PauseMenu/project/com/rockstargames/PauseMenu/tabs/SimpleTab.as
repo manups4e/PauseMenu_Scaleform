@@ -20,7 +20,6 @@
 		this.rightItemUpMC.onRollOut = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOutST);
 		this.ItemList = new Array();
 		this.rightBodyHovered = false;
-		this.rightItemUpMC._visible = false;
 	}
 
 	function mOverST()

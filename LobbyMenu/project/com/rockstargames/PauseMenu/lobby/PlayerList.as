@@ -74,6 +74,16 @@
 		this.updateItemsDrawing();
 	}
 
+	function RemoveItem(id)
+	{
+		this.ItemList[id].Clear();
+		this.ItemList.splice(id,1);
+		this.itemCount = this.ItemList.length;
+		for(var i in this.ItemList){
+			this.updateItemsDrawing();
+		}
+	}
+
 	function ScrollMenu(targetIndex, delay, end, offset)
 	{
 		if (end == undefined)
@@ -297,14 +307,14 @@
 			{
 				this.ItemList[item].itemMC._y = 0;
 			}
-			else if (item > 0)
+			else
 			{
 				this.ItemList[item].itemMC._y = this.ItemList[item - 1].itemMC._y + this.ItemList[item - 1].itemMC._height - 1.55;
 			}
 			if (this._parentMC.currentColumn.type == this.type)
 			{
 				this.ItemList[item].panel.Visible = this.ItemList[item].Selected = this.ItemList[item].highlighted = (item == this.currentSelection);
-				this.ItemList[item].panel.itemMC._x = this._parentMC.missionDetails.OFFSET;
+				this.ItemList[item].panel.itemMC._x = this._parentMC.rightX + (this.ItemList[item].panel.collapsed ? 144 : 0);
 			}
 			if (this._parentMC.currentColumn.type != this.type)
 			{

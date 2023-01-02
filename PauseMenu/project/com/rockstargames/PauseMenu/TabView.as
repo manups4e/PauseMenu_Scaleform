@@ -202,11 +202,11 @@
 	{
 		var focus = this.Focus;
 		var curTab = this.currentTab;
-		var val = -1;
+		var val = 0;
 		switch (focus)
 		{
 			case 0 :
-				this.Index--;
+				this.Index = this.Index - 1;
 				val = this.Index;
 				break;
 			case 1 :
@@ -245,11 +245,11 @@
 	{
 		var focus = this.Focus;
 		var curTab = this.currentTab;
-		var val = -1;
+		var val = 0;
 		switch (focus)
 		{
 			case 0 :
-				this.Index++;
+				this.Index = this.Index + 1;
 				val = this.Index;
 			case 1 :
 				if (curTab instanceof com.rockstargames.PauseMenu.tabs.PlayerListTab)
@@ -286,14 +286,13 @@
 	function set Index(_i)
 	{
 		this._tabIndex = _i;
-		// DA SOSTITUIRE COL CODICE VIA SCRIPT (GESTIRA INDEX VIA SCRIPT)
 		if (this._tabIndex > this.Tabs.length - 1)
 		{
-			this._tabIndex -= this.Tabs.length;
+			this._tabIndex = 0;
 		}
 		else if (this._tabIndex < 0)
 		{
-			this._tabIndex += this.Tabs.length;
+			this._tabIndex = this.Tabs.length - 1;
 		}
 		this.updateTabsDrawing();
 	}
