@@ -49,7 +49,7 @@
 		this.EnableAnim = true;
 		this.AnimType = 0;
 	}
-
+	
 	function AddItem(id, str, sub, enabled, blink, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13)
 	{
 		var item = new com.rockstargames.ScaleformUI.items.UIMenuItem(id, str, sub, this, enabled, blink, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13);
@@ -290,7 +290,7 @@
 
 	function updateItemsDrawing()
 	{
-		this.BodyMask._x = this.OFFSET;// cambierà in base alla richiesta (x)
+		this.BodyMask._x = this.OFFSET;
 		for (var item in this.ItemList)
 		{
 			this.ItemList[item].highlighted = false;
@@ -358,6 +358,9 @@
 			this.DescriptionSprite.descriptionMC.descText.autoSize = "left";
 			this.blipLayer = this.DescriptionSprite.descriptionMC.createEmptyMovieClip("blipLayer", this.DescriptionSprite.descriptionMC.getNextHighestDepth(), {_x:this.DescriptionSprite.descriptionMC.descText._x, _y:this.DescriptionSprite.descriptionMC.descText._y});
 			textBlips.setTextWithIcons(this.currentItem.subtitle,this.blipLayer,this.DescriptionSprite.descriptionMC.descText,0,format.size,2,false);
+			format.font = "$Font2";
+			format.size = 13;
+			format.leading = 2;
 			this.DescriptionSprite.descriptionMC.descText.setTextFormat(format);
 			if (this.currentItem.blinkDesc)
 			{

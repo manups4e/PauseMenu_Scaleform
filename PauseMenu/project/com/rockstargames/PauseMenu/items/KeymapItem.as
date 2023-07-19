@@ -15,6 +15,7 @@
 		this.itemTextLeft.autoSize = "none";
 		this.itemTextLeft._width = 390;
 		com.rockstargames.ui.utils.UIText.setSizedText(this.itemTextLeft,leftText,true);
+		this.updateFont(this.itemTextLeft, "$Font2");
 
         if (this.itemTextMid.bg) 
         {
@@ -33,6 +34,17 @@
 
 	}
 
+	function updateFont(tf, fontName)
+	{
+		tf.embedFonts = true;
+		tf.antiAliasType = "advanced";
+		tf.selectable = false;
+		var newFont = tf.getTextFormat();
+		newFont.font = fontName;
+		tf.setNewTextFormat(newFont);
+		tf.setTextFormat(newFont);
+	}
+
 	function setText(text, bindingItem, slot)
 	{
 		bindingItem.icons.removeMovieClip();
@@ -43,6 +55,8 @@
 			var __reg5 = bindingItem.createEmptyMovieClip("icons", bindingItem.getNextHighestDepth());
 			com.rockstargames.ui.game.GameInterface.call("SET_FORMATTED_TEXT_WITH_ICONS",com.rockstargames.ui.game.GameInterface.GENERIC_TYPE,text,__reg5,bindingItem.valueTF,0,13,3,true,false,slot);
 			com.rockstargames.ui.game.GameInterface.call("SET_FORMATTED_TEXT_WITH_ICONS",com.rockstargames.ui.game.GameInterface.GENERIC_TYPE,"~HUD_COLOUR_BLACK~" + text,__reg4,bindingItem.valueBorderTF,0,15,3,true,false,slot);
+			this.updateFont(bindingItem.valueTF, "$Font2");
+			this.updateFont(bindingItem.valueBorderTF, "$Font2");
 			return;
 		}
 		com.rockstargames.ui.utils.UIText.setSizedText(bindingItem.valueTF,"");

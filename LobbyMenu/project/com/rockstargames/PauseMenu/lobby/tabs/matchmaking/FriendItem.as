@@ -61,6 +61,17 @@
 		this.itemMC.attachMovie("mouseCatcher","mouseCatcher",this.itemMC.getNextHighestDepth(),{_width:this.itemMC._width, _height:this.itemMC._height});
 		this.itemMC.mouseCatcher.setupGenericMouseInterface(this.parentMC.itemCount,this.parentMC._parentMC.GetColumnByType("players").id,this.onMouseEvent,[this]);
 	}
+	
+	function updateFont(tf, fontName)
+	{
+		tf.embedFonts = true;
+		tf.antiAliasType = "advanced";
+		tf.selectable = false;
+		var newFont = tf.getTextFormat();
+		newFont.font = fontName;
+		tf.setNewTextFormat(newFont);
+		tf.setTextFormat(newFont);
+	}
 
 	// this function is called out of scope of the item itself, use this.something won't do anything!
 	function onMouseEvent(evtType, targetMC, args)
@@ -96,6 +107,7 @@
 	{
 		this._label = _label;
 		com.rockstargames.ui.utils.UIText.setSizedText(this.itemMC.labelMC.titleTF,_label,true,false,0,com.rockstargames.ui.utils.UIText.SIZE_GTAG);
+		this.updateFont(this.itemMC.labelMC.titleTF, "$Font2_cond");
 	}
 
 	function get Label()
@@ -218,6 +230,7 @@
 				{
 					this.itemMC.labelMC.valTF.text = "";
 				}
+				this.updateFont(this.itemMC.labelMC.valTF, "$Font2_cond");
 			}
 			if (this.itemMC.labelMC.iconMC.animIcon)
 			{
@@ -286,6 +299,7 @@
 		{
 			this.itemMC.labelMC.statusMC._visible = true;
 			this.itemMC.labelMC.statusMC.labelMC.itemTF.text = statusStr;
+			this.updateFont(this.itemMC.labelMC.statusMC.labelMC.itemTF, "$Font2_cond");
 			this.itemMC.labelMC.statusMC.bgMC._width = this.itemMC.labelMC.statusMC.labelMC.itemTF.textWidth + 10;
 			this.itemMC.labelMC.statusMC.bgMC._x = 145 - this.itemMC.labelMC.statusMC.bgMC._width;
 			var __reg2 = 112;
@@ -317,6 +331,7 @@
 				this.crewTagMC = this.itemMC.attachMovie("CREW_TAG_MOVIECLIP", "crewTagMC", this.itemMC.getNextHighestDepth(), {_y:5});
 			}
 			this.crewTagMC.labelTF.htmlText = __reg4;
+			this.updateFont(this.crewTagMC.labelTF, "$Font2_cond");
 			this.crewTagMC.labelTF.autoSize = true;
 			this.crewTagMC._x = this.itemMC.labelMC.titleTF._x + this.itemMC.labelMC.titleTF.textWidth + 8;
 			this.crewTagMC.bgMC._width = this.crewTagMC.labelTF._width + 8;

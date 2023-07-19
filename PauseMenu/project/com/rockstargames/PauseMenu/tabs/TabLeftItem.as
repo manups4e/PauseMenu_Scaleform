@@ -19,7 +19,7 @@
 	var SCROLL_DY = 27;
 	var footerMC;
 	var parentTab;
-
+	var ResType;
 	function TabLeftItem(parent, leftLabel, type, enabled, param1, param2, param3, param4)
 	{
 		this.parentTab = parent;
@@ -97,8 +97,81 @@
 			com.rockstargames.ui.utils.Colour.ApplyHudColour(this._title.title.bg,com.rockstargames.ui.utils.HudColourLite.HUD_COLOUR_PAUSE_BG);
 			com.rockstargames.ui.utils.Colour.ApplyHudColour(this._title.value1.bg,com.rockstargames.ui.utils.HudColourLite.HUD_COLOUR_PAUSE_BG);
 			com.rockstargames.ui.utils.Colour.ApplyHudColour(this._title.value2.bg,com.rockstargames.ui.utils.HudColourLite.HUD_COLOUR_PAUSE_BG);
+			this.updateFont(this._title.title.valueTF,"$Font2");
+			this.updateFont(this._title.value1.valueTF,"$Font2");
+			this.updateFont(this._title.value2.valueTF,"$Font2");
 		}
 	}
+
+	function updateBackground(txd, txn, resType)
+	{
+		if (txd == "" && txn == "")
+		{
+			this.rightMenuUp.bgMC._visible = true;
+			this.rightMenuUp.textMC._visible = true;
+			if (this.rightMenuUp.txdLoader.isLoaded)
+			{
+				this.rightMenuUp.txdLoader.removeMovieClip();
+			}
+			this.rightMenuUp.customTxd.removeMovieClip();
+			return;
+		}
+		this.ResType = resType;
+		this.rightMenuUp.bgMC._alpha = 0;
+		this.rightMenuUp.textMC._alpha = 0;
+		this.rightMenuUp.attachMovie("txdLoader","txdLoader",this.rightMenuUp.getNextHighestDepth());
+		this.scrollableContent.swapDepths(this.rightMenuUp.txdLoader);
+		if (this.rightMenuUp.txdLoader.isLoaded)
+		{
+			this.rightMenuUp.txdLoader.removeMovieClip();
+		}
+		this.SetClip(this.rightMenuUp.txdLoader,txd,txn,576,430,this.bgLoaded);
+	}
+
+	function bgLoaded()
+	{
+		if (this.ResType != 0)
+		{
+			if (this.ResType == 1)
+			{
+				this.rightMenuUp.maskMC._height = this.rightMenuUp.bgMC._height;
+			}
+			else
+			{
+				this.rightMenuUp.txdLoader._height = this.rightMenuUp.bgMC._height;
+			}
+		}
+		this.rightMenuUp.txdLoader._alpha = 0;
+		com.rockstargames.ui.tweenStar.TweenStarLite.to(this.rightMenuUp.txdLoader,0.2,{_alpha:75});
+	}
+
+	function SetClip(targetMC, textureDict, textureName, w, h, callback)
+	{
+		var _loc12_ = true;
+		if (targetMC.textureFilename != textureName && targetMC.textureDict != textureDict)
+		{
+			var _loc12_ = false;
+		}
+		targetMC.init("PauseMenu",textureDict,textureName,w,h);
+		var _loc7_ = 2;
+		var _loc5_ = String(targetMC).split(".");
+		var _loc8_ = _loc5_.slice(_loc5_.length - _loc7_).join(".");
+		com.rockstargames.ui.tweenStar.TweenStarLite.removeTweenOf(targetMC);
+		targetMC._alpha = 100;
+		targetMC.requestTxdRef(_loc8_,_loc12_,callback,this);
+	}
+
+	function updateFont(tf, fontName)
+	{
+		tf.embedFonts = true;
+		tf.antiAliasType = "advanced";
+		tf.selectable = false;
+		var newFont = tf.getTextFormat();
+		newFont.font = fontName;
+		tf.setNewTextFormat(newFont);
+		tf.setTextFormat(newFont);
+	}
+
 
 	function AddItem(_type, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10)
 	{
@@ -124,7 +197,7 @@
 			}
 			this.ItemList.push(item);
 			this.updateItemsHeight();
-			this.scrollToBottom();
+			//this.scrollToBottom();
 		}
 	}
 
@@ -312,6 +385,7 @@
 
 	function scrollAll(targetIndex, tween)
 	{
+		com.rockstargames.ui.utils.Debug.log(arguments.toString());
 		if (tween == undefined)
 		{
 			tween = true;
@@ -394,8 +468,9 @@
 
 	function set Label(_l)
 	{
-		this.leftItem.leftTextTF.autoSize = "none";
-		com.rockstargames.ui.utils.UIText.setSizedText(this.leftItem.leftTextTF,_l,true);
+		com.rockstargames.ui.utils.UIText.setSizedText(this.leftItem.leftTextTF,_l,false);
+		this.leftItem.refreshLabelFonts();
+		this.leftItem.updateLabelWidth();
 	}
 
 	function set RightLabel(_l)
@@ -416,7 +491,6 @@
 	function set Enabled(e)
 	{
 		this.leftItem.Enabled = e;
-		com.rockstargames.ui.utils.Colour.ApplyHudColourToTF(this.leftItem.rightTextTF,this.leftItem.Enabled ? (this.leftItem.highlighted ? this.leftItem._textColor : this.leftItem._textHighlightColor) : com.rockstargames.ui.utils.HudColour.HUD_COLOUR_GREY);
 	}
 
 	function get Enabled()

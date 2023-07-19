@@ -14,9 +14,8 @@
 		//this.itemMC.bgMC._visible = false;
 		this.itemMC.bgMC._alpha = 0;
 
-		com.rockstargames.ui.utils.Colour.ApplyHudColour(this.itemMC.labelMC,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_WHITE);
+		//com.rockstargames.ui.utils.Colour.ApplyHudColour(this.itemMC.labelMC,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_WHITE);
 
-		var format = this.itemMC.labelMC.titleTF.getTextFormat();
 		if (this.blipLayer)
 		{
 			this.blipLayer.removeMovieClip();
@@ -26,10 +25,20 @@
 		this.itemMC.labelMC.titleTF.wordWrap = true;
 		var _loc3_ = new com.rockstargames.ui.utils.Text();
 		this.blipLayer = this.itemMC.labelMC.createEmptyMovieClip("blipLayerMC", 1000);
-		_loc3_.setTextWithIcons(param1,this.blipLayer,this.itemMC.labelMC.titleTF,0,format.size,3,false);
-		this.itemMC.labelMC.titleTF.setTextFormat(format);
-
+		_loc3_.setTextWithIcons(param1,this.blipLayer,this.itemMC.labelMC.titleTF,param3,12.5,3,false);
+		this.updateFont(this.itemMC.labelMC.titleTF, param2);
 		this.snapBGGrid(this.itemMC.bgMC);
+	}
+
+	function updateFont(tf, fontName)
+	{
+		tf.embedFonts = true;
+		tf.antiAliasType = "advanced";
+		tf.selectable = false;
+		var newFont = tf.getTextFormat();
+		newFont.font = fontName;
+		tf.setNewTextFormat(newFont);
+		tf.setTextFormat(newFont);
 	}
 
 	function snapBGGrid(bgMC)

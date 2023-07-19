@@ -32,6 +32,8 @@
 		this.titleFreemode.highlightTitle(false);
 		com.rockstargames.ui.utils.UIText.setSizedText(this.titleFreemode.itemTextLeft,this.panelTitle,true,false,0,23);
 		com.rockstargames.ui.utils.UIText.setSizedText(this.titleFreemode.labelMC.titleshadowTF,this.panelTitle,true,false,0,23);
+		this.updateFont(this.titleFreemode.itemTextLeft,"$Font5");
+		this.updateFont(this.titleFreemode.labelMC.titleshadowTF,"$Font5");
 		this.titleFreemode.snapBGGrid(this.titleFreemode.bgMC);
 
 		com.rockstargames.ui.utils.Colour.ApplyHudColour(this.itemMC.descBG,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_PAUSE_BG);
@@ -53,6 +55,18 @@
 		}
 		this.updateDescBG();
 	}
+
+	function updateFont(tf, fontName)
+	{
+		tf.embedFonts = true;
+		tf.antiAliasType = "advanced";
+		tf.selectable = false;
+		var newFont = tf.getTextFormat();
+		newFont.font = fontName;
+		tf.setNewTextFormat(newFont);
+		tf.setTextFormat(newFont);
+	}
+
 
 	function setPicture(txd, txn)
 	{
@@ -86,11 +100,13 @@
 		com.rockstargames.ui.utils.UIText.setSizedText(this.titleFreemode.itemTextLeft,this.panelTitle,true,false,0,23);
 		com.rockstargames.ui.utils.UIText.setSizedText(this.titleFreemode.labelMC.titleshadowTF,this.panelTitle,true,false,0,23);
 		this.titleFreemode.snapBGGrid(this.titleFreemode.bgMC);
+		this.updateFont(this.titleFreemode.itemTextLeft,"$Font5");
+		this.updateFont(this.titleFreemode.labelMC.titleshadowTF,"$Font5");
 	}
 
-	function AddItem(id, textLeft, textRight, param3, param4, param5, param6)
+	function AddItem(id, textLeft, textRight, param3, param4, param5, param6, param7, param8, param9, param10)
 	{
-		var item = new com.rockstargames.PauseMenu.lobby.FreemodeDetailsItem(this, this.listDescItem + 1, id, textLeft, textRight, param3, param4, param5, param6);
+		var item = new com.rockstargames.PauseMenu.lobby.FreemodeDetailsItem(this, this.listDescItem + 1, id, textLeft, textRight, param3, param4, param5, param6, param7, param8, param9, param10);
 		if (this.listDescItem == 0)
 		{
 			item.itemMC._y = this.itemMC.descBG._y;

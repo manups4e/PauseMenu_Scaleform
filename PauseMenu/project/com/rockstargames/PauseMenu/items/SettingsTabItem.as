@@ -29,6 +29,8 @@
 	var _checkBoxHovered;
 	var _hovered;
 	var _enabled = true;
+	var labelFont = ["$Font2", 0];
+	var rightLabelFont = ["$Font2", 0];
 
 	function SettingsTabItem(mc, type, label, enabled, rightLabel, index, param5, param6, param7, param8, param9)
 	{
@@ -155,6 +157,39 @@
 		//this.itemMC.onRollOver = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOverItem, this.itemMC);
 		//this.itemMC.onRollOut = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOutItem, this.itemMC);
 		//this.itemMC.onDragOut = com.rockstargames.ui.utils.DelegateStar.create(this, this.mOutItem, this.itemMC);
+		this.refreshLabelFonts();
+	}
+	
+	function refreshLabelFonts()
+	{
+		this.updateLabelFont(this.labelFont[0],this.labelFont[1]);
+		this.updateRightLabelFont(this.rightLabelFont[0],this.rightLabelFont[1]);
+	}
+	
+	function updateLabelFont(fontName, fontId)
+	{
+		this.labelFont = new Array(fontName, fontId);
+		this.itemTextLeft.embedFonts = true;
+		this.itemTextLeft.antiAliasType = "advanced";
+		this.itemTextLeft.selectable = false;
+		var newFont = this.itemTextLeft.getTextFormat();
+		newFont.font = this.labelFont[0];
+		this.itemTextLeft.setNewTextFormat(newFont);
+		this.itemTextLeft.setTextFormat(newFont);
+		//this.updateLabelWidth();
+	}
+
+	function updateRightLabelFont(fontName, fontId)
+	{
+		this.rightLabelFont = new Array(fontName, fontId);
+		this.itemTextRight.embedFonts = true;
+		this.itemTextRight.antiAliasType = "advanced";
+		this.itemTextRight.selectable = false;
+		var newFont = this.itemTextRight.getTextFormat();
+		newFont.font = this.rightLabelFont[0];
+		this.itemTextRight.setNewTextFormat(newFont);
+		this.itemTextRight.setTextFormat(newFont);
+		//this.updateLabelWidth();
 	}
 
 	function set barscale(bi)
@@ -210,7 +245,6 @@
 		{
 			this.multiListIndex += this.multiListItems.length;
 		}
-
 		this.selectedIndex = this.multiListIndex;
 		this.selectedValue = this.multiListItems[this.multiListIndex];
 		com.rockstargames.ui.utils.UIText.setSizedText(this.itemTextRight,this.selectedValue);
@@ -218,6 +252,7 @@
 		this.itemTextRight._x = this.labelMC.rMC._x - this.itemTextRight._width - 2;
 		this.labelMC.lMC._x = this.itemTextRight._x - 2;
 		this.labelMC.rMC._visible = this.labelMC.lMC._visible = true;
+		this.refreshLabelFonts();
 	}
 
 	function get textIndex()

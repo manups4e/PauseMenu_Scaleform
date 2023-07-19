@@ -14,13 +14,13 @@
 		this.CONTENT._alpha = 0;
 	}
 
-	function CREATE_MENU(left,center,right)
+	function CREATE_MENU(left, center, right)
 	{
 		this.CONTENT._alpha = 0;
-		this.LobbyMenu = new com.rockstargames.PauseMenu.TabView(this.CONTENT,left,center,right);
+		this.LobbyMenu = new com.rockstargames.PauseMenu.TabView(this.CONTENT, left, center, right);
 	}
 
-	function SET_PANELS_ORDER(left,center,right)
+	function SET_PANELS_ORDER(left, center, right)
 	{
 		this.LobbyMenu.SetPanelsOrder(left,center,right);
 	}
@@ -35,12 +35,12 @@
 		this.LobbyMenu.fadeInLobby();
 	}
 
-	function ADD_LEFT_ITEM(id,str,sub,enabled,blink,param1,param2,param3,param4,param5,param6,param7,param8,param9,param10,param11,param12,param13)
+	function ADD_LEFT_ITEM(id, str, sub, enabled, blink, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13)
 	{
 		this.LobbyMenu.AddSetting(id,str,sub,enabled,blink,param1,param2,param3,param4,param5,param6,param7,param8,param9,param10,param11,param12,param13);
 	}
 
-	function ADD_PLAYER_ITEM(id,param0,param1,param2,param3,param4,param5,param6,param7,param8,param9,param10,param11,param12,param13)
+	function ADD_PLAYER_ITEM(id, param0, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13)
 	{
 		this.LobbyMenu.AddPlayerItem(id,param0,param1,param2,param3,param4,param5,param6,param7,param8,param9,param10,param11,param12,param13);
 	}
@@ -48,23 +48,27 @@
 	{
 		this.LobbyMenu.playersColumn.RemoveItem(id);
 	}
-
-	/* to be implemented
-	function UPDATE_SETTINGS_ITEM_LABEL_FONT(item, fontName, fontId)
+	function CLEAR_PLAYERS_COLUMN()
 	{
-		this.LobbyMenu.settingsColumn.ItemList[item].updateFont(fontName, fontId);
+		this.LobbyMenu.playersColumn.Clear();
 	}
-	*/
 
 	function UPDATE_SETTINGS_ITEM_LABELS(item, lbl, rtxt)
 	{
+		com.rockstargames.ui.utils.UIText.setSizedText(this.LobbyMenu.settingsColumn.ItemList[item].leftTextTF,lbl,false,true);
 		if (this.LobbyMenu.settingsColumn.ItemList[item]._type == 0)
 		{
-			com.rockstargames.ui.utils.UIText.setSizedText(this.LobbyMenu.settingsColumn.ItemList[item].leftTextTF,lbl,true,true);
 			this.LobbyMenu.settingsColumn.ItemList[item].SetRightText(rtxt);
 		}
+		this.LobbyMenu.settingsColumn.ItemList[item].refreshLabelFonts();
+		this.LobbyMenu.settingsColumn.ItemList[item].updateLabelWidth();
 	}
-	
+
+	function UPDATE_SETTINGS_ITEM_DESCRIPTION(item, desc)
+	{
+		this.LobbyMenu.settingsColumn.ItemList[item].subtitle = desc;
+	}
+
 	function UPDATE_SETTINGS_ITEM_BLINK_DESC(item, blink)
 	{
 		this.LobbyMenu.settingsColumn.ItemList[item].blinkDesc = blink;
@@ -75,29 +79,38 @@
 		com.rockstargames.ui.utils.UIText.setSizedText(this.LobbyMenu.settingsColumn.ItemList[item].leftTextTF,txt,true,true);
 	}
 
-	function UPDATE_SETTINGS_ITEM_LABEL_RIGHT(item,_label)
+	function UPDATE_SETTINGS_ITEM_LABEL_RIGHT(item, _label)
 	{
 		this.LobbyMenu.settingsColumn.ItemList[item].SetRightText(_label);
 	}
 
-	function SET_SETTINGS_ITEM_LEFT_BADGE(item,badge)
+	function SET_SETTINGS_ITEM_LEFT_BADGE(item, badge)
 	{
 		this.LobbyMenu.settingsColumn.ItemList[item].SetLeftBadge(badge);
 	}
 
-	function SET_SETTINGS_ITEM_RIGHT_BADGE(item,badge)
+	function SET_SETTINGS_ITEM_RIGHT_BADGE(item, badge)
 	{
 		this.LobbyMenu.settingsColumn.ItemList[item].SetRightBadge(badge);
 	}
 
-	function ENABLE_SETTINGS_ITEM(item,disable)
+	function SET_SETTINGS_ITEM_LABEL_FONT(item, fontN, fontId)
+	{
+		this.LobbyMenu.settingsColumn.ItemList[item].updateLabelFont(fontN,fontId);
+	}
+	function SET_SETTINGS_ITEM_RIGHT_LABEL_FONT(item, fontN, fontId)
+	{
+		this.LobbyMenu.settingsColumn.ItemList[item].updateRightLabelFont(fontN,fontId);
+	}
+
+	function ENABLE_SETTINGS_ITEM(item, disable)
 	{
 		this.LobbyMenu.settingsColumn.ItemList[item].Enabled = disable;
 	}
 
-	function ADD_MISSION_PANEL_ITEM(itemType,textLeft,textRight,param3,param4,param5,param6)
+	function ADD_MISSION_PANEL_ITEM(itemType, textLeft, textRight, param3, param4, param5, param6, param7, param8, param9, param10)
 	{
-		this.LobbyMenu.AddMissionPanelItem(itemType,textLeft,textRight,param3,param4,param5,param6);
+		this.LobbyMenu.AddMissionPanelItem(itemType,textLeft,textRight,param3,param4,param5,param6,param7,param8,param9,param10);
 	}
 
 	function REMOVE_MISSION_PANEL_ITEM(id)
@@ -105,7 +118,7 @@
 		this.LobbyMenu.RemoveMissionPanelItem(id);
 	}
 
-	function ADD_MISSION_PANEL_PICTURE(txd,txn)
+	function ADD_MISSION_PANEL_PICTURE(txd, txn)
 	{
 		this.LobbyMenu.SetPanelPicture(txd,txn);
 	}
@@ -115,37 +128,37 @@
 		this.LobbyMenu.SetMissionPanelTitle(title);
 	}
 
-	function SET_PLAYER_ITEM_LABEL(item,label)
+	function SET_PLAYER_ITEM_LABEL(item, label)
 	{
 		this.LobbyMenu.playersColumn.ItemList[item].Label = label;
 	}
 
-	function SET_PLAYER_ITEM_COLOUR(item,colour,colorurTag)
+	function SET_PLAYER_ITEM_COLOUR(item, colour, colorurTag)
 	{
 		this.LobbyMenu.playersColumn.ItemList[item].setColour(colour,colorurTag);
 	}
 
-	function SET_PLAYER_ITEM_RANK(item,rank)
+	function SET_PLAYER_ITEM_RANK(item, rank)
 	{
 		this.LobbyMenu.playersColumn.ItemList[item].setRank(rank);
 	}
 
-	function SET_PLAYER_ITEM_CREW(item,crew)
+	function SET_PLAYER_ITEM_CREW(item, crew)
 	{
 		this.LobbyMenu.playersColumn.ItemList[item].setCrew(crew);
 	}
 
-	function SET_PLAYER_ITEM_STATUS(item,status,statusColor)
+	function SET_PLAYER_ITEM_STATUS(item, status, statusColor)
 	{
 		this.LobbyMenu.playersColumn.ItemList[item].setStatus(status,statusColor);
 	}
 
-	function SET_PLAYER_ITEM_ICON_LEFT(item,icon,isCustom)
+	function SET_PLAYER_ITEM_ICON_LEFT(item, icon, isCustom)
 	{
 		this.LobbyMenu.playersColumn.ItemList[item].setIconLeft(icon,isCustom);
 	}
 
-	function SET_PLAYER_ITEM_ICON_RIGHT(item,icon,isCustom)
+	function SET_PLAYER_ITEM_ICON_RIGHT(item, icon, isCustom)
 	{
 		this.LobbyMenu.playersColumn.ItemList[item].setIconRight(icon,isCustom);
 	}
@@ -164,7 +177,7 @@
 		this.LobbyMenu.playersColumn.ItemList[arguments[0]].panel.AddStatItem(arguments.slice(1));
 	}
 
-	function SET_PLAYER_ITEM_PANEL_DESCRIPTION(item,desc,type,unused,collapse)
+	function SET_PLAYER_ITEM_PANEL_DESCRIPTION(item, desc, type, unused, collapse)
 	{
 		this.LobbyMenu.playersColumn.ItemList[item].panel.SET_DESCRIPTION(desc,type,unused,collapse);
 	}
@@ -183,10 +196,10 @@
 		this.LobbyMenu.Focus = f;
 	}
 
-	function SET_INPUT_EVENT(direction,time)
+	function SET_INPUT_EVENT(direction, time)
 	{
 		var retVal = -1;
-		var _result = new Array  ;
+		var _result = new Array();
 		switch (direction)
 		{
 			case com.rockstargames.ui.game.GamePadConstants.DPADUP :
@@ -209,7 +222,7 @@
 				var curItem = this.LobbyMenu.currentColumn.column.currentItem;
 				if (this.LobbyMenu.currentColumn.type == "settings" && curItem._type == 2)
 				{
-					curItem.Checked = ! curItem.Checked;
+					curItem.Checked = !curItem.Checked;
 					com.rockstargames.ui.game.GameInterface.call("PLAY_SOUND",com.rockstargames.ui.game.GameInterface.GENERIC_TYPE,"SELECT","HUD_FRONTEND_DEFAULT_SOUNDSET");
 				}
 				break;
@@ -221,7 +234,7 @@
 		return _result.toString();
 	}
 
-	function ADD_TXD_REF_RESPONSE(txd,strRef,success)
+	function ADD_TXD_REF_RESPONSE(txd, strRef, success)
 	{
 		if ((success == true))
 		{
@@ -234,7 +247,7 @@
 		}
 	}
 
-	function TXD_HAS_LOADED(txd,success,strRef)
+	function TXD_HAS_LOADED(txd, success, strRef)
 	{
 		if ((success == true))
 		{
@@ -247,7 +260,7 @@
 		}
 	}
 
-	function TXD_ALREADY_LOADED(txd,strRef)
+	function TXD_ALREADY_LOADED(txd, strRef)
 	{
 		var pMC = this.CONTENT;
 		var il = com.rockstargames.ui.media.ImageLoaderMC(eval(((pMC + ".") + strRef)));

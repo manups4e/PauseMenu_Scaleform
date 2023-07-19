@@ -8,8 +8,12 @@
 	var itemTextLeft;
 	var itemTextRight;
 	var _type;
-	function StatsTabItem(mc, _type, _label, rightLabel, _colour)
+	var labelFont = ["$Font2", 0];
+	var rightLabelFont = ["$Font2", 0];
+	
+	function StatsTabItem(mc, _type, _label, rightLabel, _colour, lFontName, lFontId, rFontName, rFontId)
 	{
+        com.rockstargames.ui.utils.Debug.log(arguments.toString());
 		this.itemMC = mc.attachMovie("statsListItem", "stats_item_" + mc.getNextHighestDepth(), mc.getNextHighestDepth());
 		this.bar = new com.rockstargames.gtav.pauseMenu.pauseMenuItems.PauseMenuColourBar(this.itemMC.barMC);
 		this.itemTextLeft = this.itemMC.labelMC.titleTF;
@@ -43,6 +47,9 @@
 				this.itemMC.barMC._visible = true;
 		}
 		com.rockstargames.ui.utils.Colour.ApplyHudColour(this.itemMC.labelMC,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_WHITE);
+		this.labelFont = [lFontName, lFontId];
+		this.rightLabelFont = [rFontName, rFontId];
+		this.refreshLabelFonts();
 	}
 
 	function updateItem(_label, rightLabel, _colour)
@@ -74,6 +81,39 @@
 				}
 				this.itemMC.barMC._visible = true;
 		}
+		this.refreshLabelFonts();
+	}
+
+	function refreshLabelFonts()
+	{
+		this.updateLabelFont(this.labelFont[0],this.labelFont[1]);
+		this.updateRightLabelFont(this.rightLabelFont[0],this.rightLabelFont[1]);
+	}
+
+	function updateLabelFont(fontName, fontId)
+	{
+		this.labelFont = new Array(fontName, fontId);
+		this.itemTextLeft.embedFonts = true;
+		this.itemTextLeft.antiAliasType = "advanced";
+		this.itemTextLeft.selectable = false;
+		var newFont = this.itemTextLeft.getTextFormat();
+		newFont.font = this.labelFont[0];
+		this.itemTextLeft.setNewTextFormat(newFont);
+		this.itemTextLeft.setTextFormat(newFont);
+		//this.updateLabelWidth();
+	}
+
+	function updateRightLabelFont(fontName, fontId)
+	{
+		this.rightLabelFont = new Array(fontName, fontId);
+		this.itemTextRight.embedFonts = true;
+		this.itemTextRight.antiAliasType = "advanced";
+		this.itemTextRight.selectable = false;
+		var newFont = this.itemTextRight.getTextFormat();
+		newFont.font = this.rightLabelFont[0];
+		this.itemTextRight.setNewTextFormat(newFont);
+		this.itemTextRight.setTextFormat(newFont);
+		//this.updateLabelWidth();
 	}
 
 	function snapBGGrid(bgMC)

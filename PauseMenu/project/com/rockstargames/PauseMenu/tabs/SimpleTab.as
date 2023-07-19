@@ -46,13 +46,13 @@
 		}
 	}
 
-	function AddItem(it, _type, param1, param2)
+	function AddItem(it, _type, param1, param2, param3, param4)
 	{
 		var item;
 		switch (_type)
 		{
 			case 0 :
-				item = new com.rockstargames.PauseMenu.items.BasicTabItem(this.scrollableContent, param1);
+				item = new com.rockstargames.PauseMenu.items.BasicTabItem(this.scrollableContent, param1, param2, param3, param4);
 				break;
 		}
 		item.itemMC.labelMC.titleTF._width = 850;
@@ -78,6 +78,52 @@
 			}
 		}
 		this.viewHeight = this.ItemList[this.ItemList.length - 1].itemMC._y + this.ItemList[this.ItemList.length - 1].itemMC.bgMC._height + 15;
+	}
+
+	function updateBackground(txd, txn)
+	{
+		if (txd == "" && txn == "")
+		{
+			this.rightItemUpMC.bgMC._visible = true;
+			this.rightItemUpMC.textMC._visible = true;
+			if (this.rightItemUpMC.txdLoader.isLoaded)
+			{
+				this.rightItemUpMC.txdLoader.removeMovieClip();
+			}
+			this.rightItemUpMC.removeMovieClip();
+			return;
+		}
+		this.rightItemUpMC.bgMC._alpha = 0;
+		this.rightItemUpMC.textMC._alpha = 0;
+		this.rightItemUpMC.attachMovie("txdLoader", "txdLoader", this.rightItemUpMC.getNextHighestDepth());
+		this.scrollableContent.swapDepths(this.rightItemUpMC.txdLoader);
+		if (this.rightItemUpMC.txdLoader.isLoaded)
+		{
+			this.rightItemUpMC.txdLoader.removeMovieClip();
+		}
+		this.SetClip(this.rightItemUpMC.txdLoader,txd,txn,868,430,this.bgLoaded);
+	}
+
+	function bgLoaded()
+	{
+		this.rightItemUpMC.txdLoader._alpha = 0;
+		com.rockstargames.ui.tweenStar.TweenStarLite.to(this.rightItemUpMC.txdLoader,0.2,{_alpha:75});
+	}
+
+	function SetClip(targetMC, textureDict, textureName, w, h, callback)
+	{
+		var _loc12_ = true;
+		if (targetMC.textureFilename != textureName && targetMC.textureDict != textureDict)
+		{
+			var _loc12_ = false;
+		}
+		targetMC.init("PauseMenu",textureDict,textureName,w,h);
+		var _loc7_ = 2;
+		var _loc5_ = String(targetMC).split(".");
+		var _loc8_ = _loc5_.slice(_loc5_.length - _loc7_).join(".");
+		com.rockstargames.ui.tweenStar.TweenStarLite.removeTweenOf(targetMC);
+		targetMC._alpha = 100;
+		targetMC.requestTxdRef(_loc8_,_loc12_,callback,this);
 	}
 
 	function scrollToBottom()

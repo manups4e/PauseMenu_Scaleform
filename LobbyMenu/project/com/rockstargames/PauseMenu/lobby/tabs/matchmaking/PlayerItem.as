@@ -75,6 +75,18 @@
 
 		this.formatNameTF();
 	}
+	
+	function updateFont(tf, fontName)
+	{
+		tf.embedFonts = true;
+		tf.antiAliasType = "advanced";
+		tf.selectable = false;
+		var newFont = tf.getTextFormat();
+		newFont.font = fontName;
+		tf.setNewTextFormat(newFont);
+		tf.setTextFormat(newFont);
+	}
+
 
 	function setLabel(_label)
 	{
@@ -84,6 +96,8 @@
 		}
 		this.itemMC.labelMC.titleTF.text = this.type == com.rockstargames.PauseMenu.lobby.tabs.matchmaking.PlayerItem.VEHICLE_ITEM ? _label : "";
 		this.itemMC.labelMC.nameTF.text = this.type == com.rockstargames.PauseMenu.lobby.tabs.matchmaking.PlayerItem.VEHICLE_ITEM ? "" : _label;
+		this.updateFont(this.itemMC.labelMC.titleTF, "$Font2_cond");
+		this.updateFont(this.itemMC.labelMC.nameTF, "$Font2_cond");
 	}
 
 	function isSpectator(_s)
@@ -116,12 +130,14 @@
 		this.itemMC.betMC.bgMC._visible = true;
 		com.rockstargames.ui.utils.Colour.ApplyHudColour(this.itemMC.betMC.bgMC,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_GREEN);
 		com.rockstargames.ui.utils.Colour.ApplyHudColour(this.itemMC.betMC.labelMC,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_WHITE);
+		this.updateFont(this.itemMC.betMC.labelMC.itemTF, "$Font2_cond");
 		this.formatNameTF();
 	}
 
 	function setRank(rank)
 	{
 		this.itemMC.rankNumTF.text = rank == undefined ? "" : String(rank);
+		this.updateFont(this.itemMC.rankNumTF, "$Font2_cond");
 	}
 
 	function setItemColour(hudColour)
@@ -441,6 +457,11 @@
 		}
 		var __reg5 = this.avatarImg.splitPath(String(this.avatarImg), __reg2);
 		this.avatarImg.requestTxdRef(__reg5,true);
+	}
+	
+	function Clear(){
+		this.avatarImg.removeTxdRef();
+		this.itemMC.removeMovieClip();
 	}
 
 	function ON_DESTROY()

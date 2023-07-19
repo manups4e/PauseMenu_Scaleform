@@ -77,16 +77,29 @@
 		com.rockstargames.ui.utils.Localisation.setTextWithTranslation(_loc3_.titleTF,"VEH_ACCESS",com.rockstargames.ui.game.GameInterface.GENERIC_TYPE,false);
 		com.rockstargames.ui.utils.UIText.setSizedText(_loc3_.titleTF,_loc3_.titleTF.text,true);
 		com.rockstargames.ui.utils.Colour.ApplyHudColour(this.itemMC.descMC.bgMC,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_PAUSE_BG);
+		this.updateFont(_loc3_.titleTF, "$Font2");
 		this.itemMC.descMC._visible = false;
 		this.itemMC.rankNumTF.textAutoSize = "shrink";
 		this.itemMC.crewInfoMC.crewRankTF.textAutoSize = "shrink";
 		this.itemMC.crewInfoMC._visible = false;
 		com.rockstargames.ui.utils.Colour.ApplyHudColour(this.itemMC.crewInfoMC.bgMC,com.rockstargames.ui.utils.HudColour.HUD_COLOUR_PAUSE_BG);
 	}
+	
+	function updateFont(tf, fontName)
+	{
+		tf.embedFonts = true;
+		tf.antiAliasType = "advanced";
+		tf.selectable = false;
+		var newFont = tf.getTextFormat();
+		newFont.font = fontName;
+		tf.setNewTextFormat(newFont);
+		tf.setTextFormat(newFont);
+	}	
 
 	function SET_TITLE(title)
 	{
 		com.rockstargames.ui.utils.UIText.setSizedText(this.itemMC.titleTF,title,true,false,18,18);
+		this.updateFont(this.itemMC.titleTF, "$Font2");
 		this.playerColourEnum = arguments[2];
 		com.rockstargames.ui.utils.Colour.ApplyHudColour(this.itemMC.titleBGMC,this.playerColourEnum);
 		if (arguments[1] == "" || arguments[1] == undefined)
@@ -107,6 +120,11 @@
 				com.rockstargames.ui.utils.UIText.setSizedText(this.itemMC.crewInfoMC.crewNameTF,arguments[1],true);
 				com.rockstargames.ui.utils.UIText.setSizedText(this.itemMC.crewInfoMC.rankNameTF,arguments[4],true);
 				this.itemMC.crewInfoMC.crewRankTF.text = arguments[8] == undefined ? "" : arguments[8];
+				
+				this.updateFont(this.itemMC.crewInfoMC.crewNameTF, "$Font2_cond");
+				this.updateFont(this.itemMC.crewInfoMC.rankNameTF, "$Font2_cond");
+				this.updateFont(this.itemMC.crewInfoMC.crewRankTF, "$Font2_cond");
+
 				if (!this.crewEmblemMC)
 				{
 					var __reg6 = 41;
@@ -141,6 +159,8 @@
 			}
 		}
 		com.rockstargames.ui.utils.UIText.setSizedText(this.itemMC.titleValTF,arguments[13] || "");
+		this.updateFont(this.itemMC.titleValTF, "$Font2");
+	
 		if (this.itemMC.crewInfoMC._visible)
 		{
 			this.itemMC.descMC._visible = false;
@@ -176,6 +196,7 @@
 		this.itemMC.rankNumTF.text = __reg20;
 		this.itemMC.rankNumTF._width = Math.min(this.RANK_TEXTFIELD_MAX_WIDTH, this.RANK_TEXT_DEFAULT_WIDTH + (this.RANK_TEXT_MAX_HEIGHT / this.itemMC.rankNumTF.textHeight - 1) * this.RANK_TEXT_HEIGHT_MULTIPLIER) * 0.5;
 		this.itemMC.rankNumTF._x = this.RANK_TEXT_CENTER_X - this.itemMC.rankNumTF._width * 0.5;
+		this.updateFont(this.itemMC.rankNumTF, "$Font2_cond_NOT_GAMERNAME");
 		if (this.itemMC.rankEmblemMC)
 		{
 			var __reg21 = com.rockstargames.ui.utils.HudColour.getGlobeColID(__reg20);
@@ -191,6 +212,7 @@
 			{
 				var __reg9 = args[__reg4] == undefined ? "" : args[__reg4];
 				com.rockstargames.ui.utils.UIText.setSizedText(__reg5,__reg9,true);
+				this.updateFont(__reg5, "$Font2");
 			}
 			////// FARE CODICE PER CUSTOM ICONS      
 			var __reg8 = args[__reg4 + 1];
@@ -243,6 +265,8 @@
 					__reg3.innerMC.progressBarMC._y = __reg17;
 					__reg3.bgMC._height = __reg10;
 					__reg3._y = this.itemMC.headerBGMC._y + this.itemMC.headerBGMC._height + 2 + __reg4 * __reg10;
+					this.updateFont(__reg3.innerMC.titleTF, "$Font2");
+					this.updateFont(__reg3.innerMC.valTF, "$Font2");
 					++__reg4;
 				}
 			}
@@ -250,6 +274,8 @@
 		__reg12._visible = true;
 		__reg12.setColour(this.playerColourEnum);
 		__reg12.init(args.slice(1));
+		this.updateFont(__reg12.innerMC.titleTF, "$Font2");
+		this.updateFont(__reg12.innerMC.valTF, "$Font2");
 		this.itemMC.vehiclePanelMC._y = Math.round(__reg12._y + __reg12._height);
 		this.itemMC.crewInfoMC._y = this.itemMC.vehiclePanelMC._y + 43;
 		this.itemMC.descMC._y = this.itemMC.crewInfoMC._y;
@@ -331,6 +357,7 @@
 			__reg2.bgMC._width = bCollapse ? 143 : 288;
 			__reg2.bgMC._height = 79;
 			__reg2._visible = !this.itemMC.crewInfoMC._visible;
+			this.updateFont(__reg2.descTF, "$Font2");
 			return;
 		}
 		__reg2._visible = false;

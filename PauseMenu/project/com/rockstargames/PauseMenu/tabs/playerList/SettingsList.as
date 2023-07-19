@@ -349,6 +349,9 @@
 			this.DescriptionSprite.descriptionMC.descText.autoSize = "left";
 			this.blipLayer = this.DescriptionSprite.descriptionMC.createEmptyMovieClip("blipLayer", this.DescriptionSprite.descriptionMC.getNextHighestDepth(), {_x:this.DescriptionSprite.descriptionMC.descText._x, _y:this.DescriptionSprite.descriptionMC.descText._y});
 			textBlips.setTextWithIcons(this.currentItem.subtitle,this.blipLayer,this.DescriptionSprite.descriptionMC.descText,0,format.size,2,false);
+			format.font = "$Font2";
+			format.size = 13;
+			format.leading = 2;
 			this.DescriptionSprite.descriptionMC.descText.setTextFormat(format);
 			if (this.currentItem.blinkDesc)
 			{

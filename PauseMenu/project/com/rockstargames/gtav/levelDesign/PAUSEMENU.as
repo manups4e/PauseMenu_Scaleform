@@ -30,6 +30,28 @@
 		this.PauseMenu.setTabIndex(val,Lval);
 	}
 
+	function UPDATE_BASE_TAB_BACKGROUND(tab, txd, txn)
+	{
+		var curTab = this.PauseMenu.Tabs[tab];
+		if (curTab instanceof com.rockstargames.PauseMenu.tabs.SimpleTab)
+		{
+			curTab.updateBackground(txd,txn);
+		}
+	}
+
+	function UPDATE_LEFT_ITEM_RIGHT_BACKGROUND(tab, item, txd, txn, resType)
+	{
+		var curTab = this.PauseMenu.Tabs[tab];
+		if (curTab instanceof com.rockstargames.PauseMenu.tabs.InfoTab)
+		{
+			var leftItem = curTab.LeftItemList[item];
+			if (leftItem.itemType == 1 || leftItem.itemType == 2 || leftItem.itemType == 3)
+			{
+				leftItem.updateBackground(txd,txn,resType);
+			}
+		}
+	}
+
 	function SELECT_LEFT_ITEM_INDEX(item)
 	{
 		this.PauseMenu.currentTab.currentSelection = item;
@@ -88,12 +110,24 @@
 
 	function UPDATE_LEFT_ITEM_LABELS(tab, item, lbl, rtxt)
 	{
+		com.rockstargames.ui.utils.UIText.setSizedText(this.PauseMenu.Tabs[tab].LeftItemList[item].leftTextTF,lbl,true,true);
 		if (this.PauseMenu.Tabs[tab].LeftItemList[item]._type == 0)
 		{
-			com.rockstargames.ui.utils.UIText.setSizedText(this.PauseMenu.Tabs[tab].LeftItemList[item].leftTextTF,lbl,true,true);
 			this.PauseMenu.Tabs[tab].LeftItemList[item].SetRightText(rtxt);
 		}
+		this.PauseMenu.Tabs[tab].LeftItemList[item].refreshLabelFonts();
+		this.PauseMenu.Tabs[tab].LeftItemList[item].updateLabelWidth();
 	}
+
+	function SET_LEFT_ITEM_LABEL_FONT(tab, item, fName, fId)
+	{
+		this.PauseMenu.Tabs[tab].LeftItemList[item].leftItem.updateLabelFont(fName,fId);
+	}
+	function SET_LEFT_ITEM_RIGHT_LABEL_FONT(tab, item, fName, fId)
+	{
+		this.PauseMenu.Tabs[tab].LeftItemList[item].updateRightLabelFont(fName,fId);
+	}
+
 	function UPDATE_LEFT_ITEM_LABEL(tab, item, _label)
 	{
 		this.PauseMenu.Tabs[tab].LeftItemList[item].Label = _label;
@@ -153,7 +187,7 @@
 				switch (this.PauseMenu.Focus)
 				{
 					case 1 :
-						if (this.PauseMenu.currentTabinstanceofcom.rockstargames.PauseMenu.tabs.PlayerListTab)
+						if (this.PauseMenu.currentTab instanceof com.rockstargames.PauseMenu.tabs.PlayerListTab)
 						{
 							switch (this.PauseMenu.currentTab.Focus)
 							{
@@ -188,18 +222,18 @@
 	{
 		// -1 up , 1 down
 		var focus = this.PauseMenu.Focus;
-		if ((focus == 1))
+		if (focus == 1)
 		{
 			var curTab = this.PauseMenu.currentTab;
 			var curItem = curTab.currentItem;
-			if (!this.PauseMenu.currentTab instanceof com.rockstargames.PauseMenu.tabs.SimpleTab)
+			if (curTab instanceof com.rockstargames.PauseMenu.tabs.InfoTab)
 			{
-				if (curItem.panelHovered || isJoyPad)
+				if (curItem.itemType == 1)
 				{
 					curItem.scrollAll(direction,true);
 				}
 			}
-			else if (this.PauseMenu.currentTab instanceof com.rockstargames.PauseMenu.tabs.SimpleTab)
+			else if (curTab instanceof com.rockstargames.PauseMenu.tabs.SimpleTab)
 			{
 				if (curTab.panelHovered || isJoyPad)
 				{
@@ -352,11 +386,27 @@
 
 	function UPDATE_PLAYERS_TAB_SETTINGS_ITEM_LABELS(tab, item, lbl, rtxt)
 	{
+		com.rockstargames.ui.utils.UIText.setSizedText(this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].leftTextTF,lbl,false,true);
 		if (this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item]._type == 0)
 		{
-			com.rockstargames.ui.utils.UIText.setSizedText(this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].leftTextTF,lbl,true,true);
 			this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].SetRightText(rtxt);
 		}
+		this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].refreshLabelFonts();
+	}
+
+	function SET_PLAYERS_TAB_SETTINGS_ITEM_LABEL_FONT(tab, item, fName, fId)
+	{
+		this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].updateLabelFont(fName,fId);
+	}
+	function SET_PLAYERS_TAB_SETTINGS_ITEM_RIGHT_LABEL_FONT(tab, item, fName, fId)
+	{
+		this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].updateRightLabelFont(fName,fId);
+	}
+
+	function UPDATE_PLAYERS_TAB_SETTINGS_ITEM_DESCRIPTION(tab, item, desc)
+	{
+		this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].subtitle = desc;
+		this.PauseMenu.Tabs[tab].settingsColumn.updateDescription();
 	}
 
 	function UPDATE_PLAYERS_TAB_SETTINGS_ITEM_BLINK_DESC(tab, item, blink)
@@ -366,7 +416,8 @@
 
 	function UPDATE_PLAYERS_TAB_SETTINGS_ITEM_LABEL(tab, item, txt)
 	{
-		com.rockstargames.ui.utils.UIText.setSizedText(this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].leftTextTF,txt,true,true);
+		com.rockstargames.ui.utils.UIText.setSizedText(this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].leftTextTF,txt,false,true);
+		this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].refreshLabelFonts();
 	}
 
 	function UPDATE_PLAYERS_TAB_SETTINGS_ITEM_LABEL_RIGHT(tab, item, _label)
@@ -387,42 +438,6 @@
 	function ENABLE_PLAYERS_TAB_SETTINGS_ITEM(tab, item, disable)
 	{
 		this.PauseMenu.Tabs[tab].settingsColumn.ItemList[item].Enabled = disable;
-	}
-
-	function ADD_TXD_REF_RESPONSE(txd, strRef, success)
-	{
-		if ((success == true))
-		{
-			var pMC = this.CONTENT;
-			var il = com.rockstargames.ui.media.ImageLoaderMC(eval(((pMC + ".") + strRef)));
-			if ((pMC != undefined))
-			{
-				il.displayTxdResponse(txd);
-			}
-		}
-	}
-
-	function TXD_HAS_LOADED(txd, success, strRef)
-	{
-		if ((success == true))
-		{
-			var pMC = this.CONTENT;
-			var il = com.rockstargames.ui.media.ImageLoaderMC(eval(((pMC + ".") + strRef)));
-			if ((pMC != undefined))
-			{
-				il.displayTxdResponse(txd,success);
-			}
-		}
-	}
-
-	function TXD_ALREADY_LOADED(txd, strRef)
-	{
-		var pMC = this.CONTENT;
-		var il = com.rockstargames.ui.media.ImageLoaderMC(eval(((pMC + ".") + strRef)));
-		if ((pMC != undefined))
-		{
-			il.displayTxdResponse(txd,true);
-		}
 	}
 
 	function CLEAR_ALL()
@@ -459,5 +474,44 @@
 		}
 		this.CONTENT.mouseCatcher.removeMovieClip();
 		this.PauseMenu = new com.rockstargames.PauseMenu.TabView(this.CONTENT);
+	}
+
+	function ADD_TXD_REF_RESPONSE(txd, strRef, success)
+	{
+		com.rockstargames.ui.utils.Debug.log("ADD_TXD_REF_RESPONSE: " + arguments.toString());
+		if ((success == true))
+		{
+			var pMC = this.CONTENT;
+			var il = com.rockstargames.ui.media.ImageLoaderMC(eval(((pMC + ".") + strRef)));
+			if ((pMC != undefined))
+			{
+				il.displayTxdResponse(txd);
+			}
+		}
+	}
+
+	function TXD_HAS_LOADED(txd, success, strRef)
+	{
+		com.rockstargames.ui.utils.Debug.log("TXD_HAS_LOADED: " + arguments.toString());
+		if ((success == true))
+		{
+			var pMC = this.CONTENT;
+			var il = com.rockstargames.ui.media.ImageLoaderMC(eval(((pMC + ".") + strRef)));
+			if ((pMC != undefined))
+			{
+				il.displayTxdResponse(txd,success);
+			}
+		}
+	}
+
+	function TXD_ALREADY_LOADED(txd, strRef)
+	{
+		com.rockstargames.ui.utils.Debug.log("TXD_ALREADY_LOADED: " + arguments.toString());
+		var pMC = this.CONTENT;
+		var il = com.rockstargames.ui.media.ImageLoaderMC(eval(((pMC + ".") + strRef)));
+		if ((pMC != undefined))
+		{
+			il.displayTxdResponse(txd,true);
+		}
 	}
 }

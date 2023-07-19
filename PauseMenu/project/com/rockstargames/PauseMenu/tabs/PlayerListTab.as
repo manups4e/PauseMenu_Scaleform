@@ -133,7 +133,7 @@
 		switch (this.currentColumn.type)
 		{
 			case "settings" :
-				this.currentColumn.column.currentSelection = 0;
+				//this.currentColumn.column.currentSelection = 0;
 				break;
 			case "players" :
 				for (var i in this.settingsColumn.ItemList)

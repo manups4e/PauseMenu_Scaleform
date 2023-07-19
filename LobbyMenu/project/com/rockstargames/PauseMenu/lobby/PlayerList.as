@@ -447,6 +447,7 @@
 		{
 			this.ItemList[i].Clear();
 		}
+		this.ItemList = new Array();
 	}
 
 }
